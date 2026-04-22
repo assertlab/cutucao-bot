@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background gradient -->
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#2a2d3e"/>
+      <stop offset="100%" style="stop-color:#1a1c2e"/>
+    </radialGradient>
+    <!-- Dog body color -->
+    <linearGradient id="caramelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4943A"/>
+      <stop offset="50%" style="stop-color:#C4842A"/>
+      <stop offset="100%" style="stop-color:#B07420"/>
+    </linearGradient>
+    <!-- Belly/lighter area -->
+    <linearGradient id="bellyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8B86D"/>
+      <stop offset="100%" style="stop-color:#DCAA55"/>
+    </linearGradient>
+    <!-- Nose gradient -->
+    <radialGradient id="noseGrad" cx="40%" cy="35%">
+      <stop offset="0%" style="stop-color:#4a3a2a"/>
+      <stop offset="100%" style="stop-color:#2a1a0a"/>
+    </radialGradient>
+    <!-- Subtle shadow -->
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+    <!-- Glow for the circle -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#bgGrad)" filter="url(#shadow)"/>
+  
+  <!-- Subtle ring -->
+  <circle cx="256" cy="256" r="228" fill="none" stroke="#3d4160" stroke-width="2" opacity="0.5"/>
+
+  <!-- === DOG FACE === -->
+  
+  <!-- Head - main shape -->
+  <ellipse cx="256" cy="260" rx="120" ry="110" fill="url(#caramelGrad)"/>
+  
+  <!-- Lighter face area / cheeks -->
+  <ellipse cx="256" cy="285" rx="85" ry="70" fill="url(#bellyGrad)" opacity="0.6"/>
+  
+  <!-- Left ear - floppy -->
+  <path d="M155 200 Q120 120 100 170 Q85 210 145 235" fill="#B07420" stroke="#9A6418" stroke-width="1.5"/>
+  <path d="M155 205 Q125 135 110 175 Q98 210 148 232" fill="url(#caramelGrad)"/>
+  <!-- Inner ear -->
+  <path d="M150 210 Q130 155 118 180 Q110 205 145 225" fill="#D4943A" opacity="0.7"/>
+  
+  <!-- Right ear - floppy -->
+  <path d="M357 200 Q392 120 412 170 Q427 210 367 235" fill="#B07420" stroke="#9A6418" stroke-width="1.5"/>
+  <path d="M357 205 Q387 135 402 175 Q414 210 364 232" fill="url(#caramelGrad)"/>
+  <!-- Inner ear -->
+  <path d="M362 210 Q382 155 394 180 Q402 205 367 225" fill="#D4943A" opacity="0.7"/>
+
+  <!-- Eyebrows - raised, inquisitive "cadê o check-in?" look -->
+  <!-- Left eyebrow -->
+  <path d="M195 215 Q215 195 240 210" stroke="#8B5E14" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- Right eyebrow - slightly higher for the questioning look -->
+  <path d="M272 205 Q297 188 317 208" stroke="#8B5E14" stroke-width="4" fill="none" stroke-linecap="round"/>
+  
+  <!-- Eyes - big, expressive, slightly judgy -->
+  <!-- Left eye white -->
+  <ellipse cx="220" cy="245" rx="22" ry="24" fill="white"/>
+  <!-- Left eye iris -->
+  <ellipse cx="224" cy="247" rx="14" ry="15" fill="#3a2510"/>
+  <!-- Left eye pupil -->
+  <ellipse cx="226" cy="245" rx="7" ry="8" fill="#1a0a00"/>
+  <!-- Left eye shine -->
+  <circle cx="230" cy="240" r="5" fill="white" opacity="0.9"/>
+  <circle cx="218" cy="250" r="2.5" fill="white" opacity="0.5"/>
+  
+  <!-- Right eye white -->
+  <ellipse cx="292" cy="242" rx="22" ry="24" fill="white"/>
+  <!-- Right eye iris -->
+  <ellipse cx="296" cy="244" rx="14" ry="15" fill="#3a2510"/>
+  <!-- Right eye pupil -->
+  <ellipse cx="298" cy="242" rx="7" ry="8" fill="#1a0a00"/>
+  <!-- Right eye shine -->
+  <circle cx="302" cy="237" r="5" fill="white" opacity="0.9"/>
+  <circle cx="290" cy="247" r="2.5" fill="white" opacity="0.5"/>
+
+  <!-- Snout area - lighter -->
+  <ellipse cx="256" cy="300" rx="50" ry="35" fill="#E8C080"/>
+  
+  <!-- Nose -->
+  <ellipse cx="256" cy="288" rx="18" ry="13" fill="url(#noseGrad)"/>
+  <!-- Nose shine -->
+  <ellipse cx="250" cy="284" rx="5" ry="3" fill="#6a5a4a" opacity="0.5"/>
+
+  <!-- Mouth - slight smirk -->
+  <path d="M243 302 Q256 316 269 302" stroke="#8B5E14" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Center line from nose -->
+  <line x1="256" y1="298" x2="256" y2="305" stroke="#8B5E14" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Tongue sticking out slightly -->
+  <ellipse cx="262" cy="316" rx="10" ry="8" fill="#E8788A"/>
+  <ellipse cx="262" cy="314" rx="8" ry="5" fill="#F08898" opacity="0.6"/>
+
+  <!-- Whisker dots -->
+  <circle cx="225" cy="298" r="2" fill="#9A6418"/>
+  <circle cx="218" cy="305" r="2" fill="#9A6418"/>
+  <circle cx="287" cy="298" r="2" fill="#9A6418"/>
+  <circle cx="294" cy="305" r="2" fill="#9A6418"/>
+
+  <!-- === MEGAPHONE (cutucão!) === -->
+  <!-- The dog is holding a small megaphone to the side -->
+  
+  <!-- Paw -->
+  <ellipse cx="365" cy="320" rx="18" ry="15" fill="url(#caramelGrad)" transform="rotate(-15 365 320)"/>
+  <circle cx="355" cy="312" r="6" fill="#D4943A"/>
+  <circle cx="365" cy="308" r="6" fill="#D4943A"/>
+  <circle cx="375" cy="312" r="6" fill="#D4943A"/>
+  
+  <!-- Megaphone body -->
+  <path d="M370 310 L410 285 L420 330 L375 325 Z" fill="#5B7FFF" stroke="#4A6AE0" stroke-width="1.5"/>
+  <!-- Megaphone opening -->
+  <ellipse cx="417" cy="307" rx="14" ry="25" fill="#4A6AE0" transform="rotate(-10 417 307)"/>
+  <ellipse cx="417" cy="307" rx="10" ry="20" fill="#3A5AD0" transform="rotate(-10 417 307)"/>
+  <!-- Megaphone detail -->
+  <path d="M380 315 L385 318" stroke="#4A6AE0" stroke-width="2"/>
+  
+  <!-- Sound waves from megaphone -->
+  <path d="M432 295 Q445 305 432 318" stroke="#5B7FFF" stroke-width="2.5" fill="none" opacity="0.7" stroke-linecap="round"/>
+  <path d="M440 288 Q458 305 440 325" stroke="#5B7FFF" stroke-width="2" fill="none" opacity="0.4" stroke-linecap="round"/>
+
+  <!-- === TEXT === -->
+  
+  <!-- "cutu" in lighter weight -->
+  <text x="256" y="430" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="52" fill="#9BA3C7" font-weight="400" letter-spacing="3">
+    <tspan>cutu</tspan><tspan fill="#5B7FFF" font-weight="800">CÃO</tspan>
+  </text>
+  
+  <!-- Tagline -->
+  <text x="256" y="458" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="14" fill="#6B7199" font-weight="300" letter-spacing="4">
+    ASSERT LAB BOT
+  </text>
+
+</svg>

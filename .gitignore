@@ -141,6 +141,7 @@ vite.config.ts.timestamp-*
 # Credenciais
 .env
 .env.*
+!.env.example
 
 # Banco de dados
 *.db
