@@ -137,3 +137,13 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Credenciais
+.env
+.env.*
+
+# Banco de dados
+*.db
+*.db-wal
+*.db-shm
+data/
