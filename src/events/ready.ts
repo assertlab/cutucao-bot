@@ -1,4 +1,5 @@
 import { Client } from "discord.js";
+import { commands } from "../commands";
 import { config } from "../config";
 import { log } from "../utils/log";
 import { listarCanaisOrientacao } from "../utils/canais";
@@ -32,4 +33,12 @@ export async function onReady(client: Client<true>): Promise<void> {
   log.info(
     `Categoria "${config.categoriaOrientacoes}" detectada com ${canais.length} canal(is) de orientação.`,
   );
+
+  try {
+    const payload = [...commands.values()].map((cmd) => cmd.data.toJSON());
+    await guild.commands.set(payload);
+    log.info(`${payload.length} comando(s) slash registrado(s) no guild.`);
+  } catch (err) {
+    log.error("Falha ao registrar comandos slash.", err);
+  }
 }

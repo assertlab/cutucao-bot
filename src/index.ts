@@ -2,6 +2,7 @@ import { Client, Events, GatewayIntentBits, Partials } from "discord.js";
 import { config } from "./config";
 import { closeDatabase } from "./database";
 import { onChannelCreate } from "./events/channelCreate";
+import { onInteractionCreate } from "./events/interactionCreate";
 import { onMessageCreate } from "./events/messageCreate";
 import { onReady } from "./events/ready";
 import { iniciarAgendador, pararAgendador } from "./jobs/scheduler";
@@ -33,6 +34,10 @@ client.on(Events.MessageCreate, (message) => {
 
 client.on(Events.ChannelCreate, (channel) => {
   void onChannelCreate(channel);
+});
+
+client.on(Events.InteractionCreate, (interaction) => {
+  void onInteractionCreate(interaction);
 });
 
 client.on(Events.GuildCreate, async (guild) => {
