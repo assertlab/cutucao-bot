@@ -1,6 +1,7 @@
 import { ChannelType, MessageFlags, SlashCommandBuilder } from "discord.js";
-import { listarHistoricoCanal } from "../database";
 import { config } from "../config";
+import { mensagens } from "../mensagens";
+import { checkinRepo } from "../repositories";
 import { isCanalOrientacao } from "../utils/canais";
 import { currentIsoWeek, formatWeekRange, isoWeekOffset } from "../utils/semana";
 import { displayNameFromChannel } from "../utils/validacao";
@@ -25,7 +26,7 @@ export const resumoCommand: SlashCommand = {
 
     if (!interaction.guild) {
       await interaction.reply({
-        content: "🐕 Este comando só funciona em um servidor.",
+        content: mensagens.get("cmd_erro_guild_only"),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -34,7 +35,7 @@ export const resumoCommand: SlashCommand = {
     const canal = interaction.guild.channels.cache.get(canalOpt.id);
     if (!canal || !isCanalOrientacao(canal)) {
       await interaction.reply({
-        content: "🐕 O canal selecionado não é um canal de orientação válido.\nEscolha um canal da categoria **Orientações** com prefixo `phd-`, `msc-` ou `bsc-`.",
+        content: mensagens.get("cmd_erro_canal_invalido"),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -46,7 +47,7 @@ export const resumoCommand: SlashCommand = {
       semanas.push(isoWeekOffset(semanaAtual, -i));
     }
 
-    const historico = listarHistoricoCanal(canal.id);
+    const historico = checkinRepo.listarHistoricoCanal(canal.id);
     const porSemana = new Map(historico.map((r) => [r.semana, r.checkinRealizado]));
 
     const nomeLegivel = displayNameFromChannel(canal.name);
@@ -54,17 +55,17 @@ export const resumoCommand: SlashCommand = {
       const { inicio, fim } = formatWeekRange(semana);
       const flag = porSemana.get(semana);
       const icone = flag === 1 ? "✅" : flag === 0 ? "❌" : "—";
-      const label = flag === undefined ? "sem dados" : flag === 1 ? "check-in realizado" : "não postou";
+      const label =
+        flag === undefined ? "sem dados" : flag === 1 ? "check-in realizado" : "não postou";
       return `${icone} **${inicio}–${fim}** — ${label}`;
     });
 
-    const conteudo =
-      `🐕 **Histórico de check-ins — ${nomeLegivel}**\n` +
-      `Canal: <#${canal.id}>\n\n` +
-      linhas.join("\n");
-
     await interaction.reply({
-      content: conteudo,
+      content: mensagens.get("cmd_resumo_historico", {
+        nome: nomeLegivel,
+        canal_id: canal.id,
+        linhas: linhas.join("\n"),
+      }),
       flags: MessageFlags.Ephemeral,
     });
   },

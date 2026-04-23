@@ -1,6 +1,7 @@
 import { Interaction, MessageFlags } from "discord.js";
 import { commands } from "../commands";
 import { config } from "../config";
+import { mensagens } from "../mensagens";
 import { log, maskId } from "../utils/log";
 import { exigirOrientador } from "../utils/permissoes";
 
@@ -25,12 +26,12 @@ export async function onInteractionCreate(interaction: Interaction): Promise<voi
     try {
       if (interaction.deferred || interaction.replied) {
         await interaction.followUp({
-          content: "🐕 Algo deu errado ao executar o comando.",
+          content: mensagens.get("cmd_erro_generico"),
           flags: MessageFlags.Ephemeral,
         });
       } else {
         await interaction.reply({
-          content: "🐕 Algo deu errado ao executar o comando.",
+          content: mensagens.get("cmd_erro_generico"),
           flags: MessageFlags.Ephemeral,
         });
       }

@@ -1,5 +1,6 @@
 import { Client, MessageFlags, SlashCommandBuilder } from "discord.js";
 import { jobLembrete } from "../jobs/lembrete";
+import { mensagens } from "../mensagens";
 import { log, maskId } from "../utils/log";
 import { SlashCommand } from "./types";
 
@@ -17,14 +18,10 @@ export const testeLembreteCommand: SlashCommand = {
     );
     try {
       await jobLembrete(interaction.client as Client<true>);
-      await interaction.editReply(
-        "🐕 Au au! Lembretes disparados manualmente. Confira os canais de orientação.",
-      );
+      await interaction.editReply(mensagens.get("cmd_teste_lembrete_sucesso"));
     } catch (err) {
       log.error("Falha ao executar /teste-lembrete.", err);
-      await interaction.editReply(
-        "🐕 Algo deu errado ao disparar os lembretes. Confira os logs.",
-      );
+      await interaction.editReply(mensagens.get("cmd_teste_lembrete_erro"));
     }
   },
 };
