@@ -30,9 +30,9 @@ Onde `<nível>` é um dos três prefixos obrigatórios:
 
 | Prefixo | Significado     | Exemplo                 |
 | ------- | --------------- | ----------------------- |
-| `phd-`  | Doutorado       | `#phd-fagner-fernandes` |
-| `msc-`  | Mestrado        | `#msc-alana-fernandes`  |
-| `bsc-`  | Graduação (TCC) | `#bsc-daniel-oliveira`  |
+| `phd-`  | Doutorado       | `#phd-jack-bauer` |
+| `msc-`  | Mestrado        | `#msc-natasha-romanoff`  |
+| `bsc-`  | Graduação (TCC) | `#bsc-harry-potter`  |
 
 **Regras do nome:**
 
@@ -44,16 +44,16 @@ Onde `<nível>` é um dos três prefixos obrigatórios:
 **Exemplos válidos:**
 
 ```
-#phd-fagner-fernandes     ✅
-#msc-joao-pedro-pereira   ✅
-#bsc-geraldo              ✅
+#phd-jack-bauer         ✅
+#msc-natasha-romanoff   ✅
+#bsc-harry-potter       ✅
 ```
 
 **Exemplos inválidos (ignorados pelo bot):**
 
 ```
-#mestrado-alana           ❌ (prefixo errado)
-#msc_alana_fernandes      ❌ (underscore em vez de hífen — Discord não permite de qualquer forma)
+#mestrado-natasha           ❌ (prefixo errado)
+#msc_natasha_romanoff      ❌ (underscore em vez de hífen — Discord não permite de qualquer forma)
 #orientacao-geral         ❌ (sem prefixo de nível)
 ```
 
@@ -97,8 +97,8 @@ Na inicialização e durante a execução, o bot usa a seguinte lógica:
 
 **Nome do aluno nos relatórios:** O bot converte o nome do canal em nome legível:
 
-- `msc-alana-fernandes` → "Alana Fernandes (msc)"
-- `phd-joao-pedro-silva` → "Joao Pedro Silva (phd)"
+- `msc-natasha-romanoff` → "Natasha Romanoff (msc)"
+- `phd-harry-potter` → "Harry Potter (phd)"
 
 A conversão capitaliza cada palavra e remove o prefixo de nível.
 
@@ -146,7 +146,7 @@ O bot nunca pune ou restringe o aluno — ele apenas torna a inatividade visíve
 | `DISCORD_TOKEN` | Sim         | Token do bot (Discord Developer Portal → Bot → Reset Token)            | `MTQ5NjQ2...`        |
 | `GUILD_ID`      | Sim         | ID do servidor Discord (botão direito no nome do servidor → Copiar ID) | `123456789012345678` |
 | `ORIENTADOR_ID` | Sim         | ID do usuário que recebe resumos e acessa comandos restritos           | `987654321098765432` |
-| `DATABASE_PATH` | Sim         | Caminho do arquivo SQLite                                              | `./data/cutucao.db`  |
+| `DATABASE_PATH` | Sim         | Caminho do arquivo SQLite                                              | `./data/base.db`  |
 | `TZ`            | Sim         | Fuso horário para os agendamentos (formato IANA)                       | `America/Recife`     |
 
 **Como obter IDs:** Ative o Modo de Desenvolvedor no Discord (Configurações → Avançado → Modo de Desenvolvedor). Depois, clique com botão direito em qualquer elemento para ver a opção "Copiar ID".
@@ -165,7 +165,7 @@ O bot usa SQLite com WAL mode. O banco é criado automaticamente na primeira exe
 | ------------------------------- | --------------- | -------------------------------------------- |
 | `id`                            | INTEGER (PK)    | ID auto-incremento                           |
 | `canalId`                       | TEXT            | ID do canal Discord                          |
-| `nomeCanal`                     | TEXT            | Nome do canal (ex: "msc-alana-fernandes")    |
+| `nomeCanal`                     | TEXT            | Nome do canal (ex: "msc-natasha-romanoff")    |
 | `nivel`                         | TEXT            | "phd", "msc" ou "bsc"                        |
 | `semana`                        | TEXT            | Semana ISO (ex: "2026-W17")                  |
 | `checkinRealizado`              | INTEGER         | 0 = não postou, 1 = postou                   |
