@@ -28,13 +28,13 @@ O cutuCÃO nasce de uma filosofia simples: **o aluno é dono do próprio progres
 
 **Comandos úteis:**
 
-| Comando | Descrição | Acesso |
-|---|---|---|
-| `/template` | Exibe o template de check-in | Todos |
-| `/ajuda` | Lista todos os comandos | Todos |
-| `/status` | Quem postou e quem não postou na semana | Orientador |
-| `/resumo #canal` | Histórico de check-ins das últimas 4 semanas | Orientador |
-| `/teste-lembrete` | Dispara manualmente o job de lembrete | Orientador |
+| Comando           | Descrição                                    | Acesso     |
+| ----------------- | -------------------------------------------- | ---------- |
+| `/template`       | Exibe o template de check-in                 | Todos      |
+| `/ajuda`          | Lista todos os comandos                      | Todos      |
+| `/status`         | Quem postou e quem não postou na semana      | Orientador |
+| `/resumo #canal`  | Histórico de check-ins das últimas 4 semanas | Orientador |
+| `/teste-lembrete` | Dispara manualmente o job de lembrete        | Orientador |
 
 **Detecção automática** — Canais com prefixo `phd-`, `msc-` ou `bsc-` na categoria "Orientações" são monitorados automaticamente. Criou um canal novo? O cutuCÃO já começa a vigiar.
 
@@ -131,21 +131,21 @@ O servidor precisa ter uma **categoria** chamada exatamente **"Orientações"**.
 
 ```
 📁 Orientações
-   🔒 #phd-fagner-fernandes
-   🔒 #msc-alana-fernandes
-   🔒 #bsc-daniel-oliveira
+   🔒 #phd-jack-bauer
+   🔒 #msc-natasha-romanoff
+   🔒 #bsc-harry-potter
 ```
 
 Os três prefixos reconhecidos são `phd-` (doutorado), `msc-` (mestrado) e `bsc-` (graduação/TCC). Canais sem esses prefixos são ignorados. Novos canais criados nessa categoria são detectados automaticamente.
 
 ### Ciclo semanal
 
-| Dia | Horário | O que acontece |
-|---|---|---|
-| Segunda | 09:00 | Lembrete com template de check-in em cada canal |
-| Segunda–Domingo | — | Qualquer mensagem do aluno no canal conta como check-in |
-| Quarta | 09:00 | Cobrança gentil nos canais sem check-in |
-| Sexta | 18:00 | Resumo semanal por DM ao orientador |
+| Dia             | Horário | O que acontece                                          |
+| --------------- | ------- | ------------------------------------------------------- |
+| Segunda         | 09:00   | Lembrete com template de check-in em cada canal         |
+| Segunda–Domingo | —       | Qualquer mensagem do aluno no canal conta como check-in |
+| Quarta          | 09:00   | Cobrança gentil nos canais sem check-in                 |
+| Sexta           | 18:00   | Resumo semanal por DM ao orientador                     |
 
 ### Detecção de check-in
 
