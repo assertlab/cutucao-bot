@@ -683,6 +683,23 @@ Antes de colocar o cutuCÃO em produção, verificar todos os itens:
 - [ ] Notificação de marcos/deadlines próximos (qualificação, defesa)
 - [ ] Métricas de longo prazo (taxa de adesão por mês, evolução)
 
+### Fase 5 — Engenharia de Software
+
+- [ ] M1: Externalizar mensagens para arquivo JSON + serviço de templates
+- [ ] M2: Implementar padrão Repository para checkins e configurações
+- [ ] M3: Container de injeção de dependências
+- [ ] M4: Testes automatizados com Vitest (unitários + integração)
+- [ ] M5: CI/CD com GitHub Actions (typecheck, testes, audit)
+- [ ] M6: Logs estruturados + alertas por DM em falhas de jobs
+
+### Fase 6 — Dashboard e gestão
+
+- [ ] M7: Dashboard web para visualização de status e métricas
+- [ ] Edição de mensagens/templates via dashboard
+- [ ] Configuração de horários e parâmetros via dashboard
+- [ ] Autenticação OAuth2 via Discord
+- [ ] Métricas históricas de adesão
+
 ---
 
 ## 11. Instruções para Claude Code
