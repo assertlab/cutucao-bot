@@ -144,6 +144,15 @@ export function semanasConsecutivasSemCheckin(
   return contador;
 }
 
+export function listarHistoricoCanal(
+  canalId: string,
+): Array<{ semana: string; checkinRealizado: 0 | 1 }> {
+  return stmts.historicoCanal.all(canalId) as Array<{
+    semana: string;
+    checkinRealizado: 0 | 1;
+  }>;
+}
+
 export function limparHistoricoAntigo(meses: number): number {
   const corte = new Date();
   corte.setMonth(corte.getMonth() - meses);

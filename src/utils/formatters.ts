@@ -70,6 +70,15 @@ export function mensagemResumoSemanal(
   );
 }
 
+export function templateCheckin(): string {
+  return (
+    `**O que fiz desde o último check-in:**\n-\n\n` +
+    `**O que pretendo fazer esta semana:**\n-\n\n` +
+    `**Onde estou travado (se aplicável):**\n-\n\n` +
+    `**Próximo marco/entrega:**\n-`
+  );
+}
+
 export function mensagemAlertaInativos(inativos: LinhaResumo[]): string {
   const linhas = inativos
     .map((l) => {

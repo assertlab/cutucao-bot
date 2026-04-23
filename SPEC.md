@@ -661,11 +661,11 @@ Antes de colocar o cutuCÃO em produção, verificar todos os itens:
 
 ### Fase 2 — Complementos
 
-- [ ] Mensagem de boas-vindas com nome sanitizado
-- [ ] Comando `/template`
-- [ ] Comando `/status` (ephemeral)
-- [ ] Comando `/resumo @aluno` (ephemeral)
-- [ ] Comando `/ajuda`
+- [x] Mensagem de boas-vindas com nome sanitizado
+- [x] Comando `/template`
+- [x] Comando `/status` (ephemeral)
+- [x] Comando `/resumo #canal` (ephemeral)
+- [x] Comando `/ajuda`
 - [x] Job de limpeza de dados antigos (seção 9.6)
 
 ### Fase 3 — Configuração dinâmica

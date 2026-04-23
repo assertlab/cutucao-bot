@@ -2,6 +2,7 @@ import { Client, Events, GatewayIntentBits, Partials } from "discord.js";
 import { config } from "./config";
 import { closeDatabase } from "./database";
 import { onChannelCreate } from "./events/channelCreate";
+import { onGuildMemberAdd } from "./events/guildMemberAdd";
 import { onInteractionCreate } from "./events/interactionCreate";
 import { onMessageCreate } from "./events/messageCreate";
 import { onReady } from "./events/ready";
@@ -34,6 +35,10 @@ client.on(Events.MessageCreate, (message) => {
 
 client.on(Events.ChannelCreate, (channel) => {
   void onChannelCreate(channel);
+});
+
+client.on(Events.GuildMemberAdd, (member) => {
+  void onGuildMemberAdd(member);
 });
 
 client.on(Events.InteractionCreate, (interaction) => {
