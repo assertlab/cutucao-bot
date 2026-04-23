@@ -3,6 +3,7 @@ import { ajudaCommand } from "./ajuda";
 import { resumoCommand } from "./resumo";
 import { statusCommand } from "./status";
 import { templateCommand } from "./template";
+import { testeBoasVindasCommand } from "./testeBoasVindas";
 import { testeLembreteCommand } from "./testeLembrete";
 
 const todos: SlashCommand[] = [
@@ -10,6 +11,7 @@ const todos: SlashCommand[] = [
   resumoCommand,
   statusCommand,
   templateCommand,
+  testeBoasVindasCommand,
   testeLembreteCommand,
 ];
 

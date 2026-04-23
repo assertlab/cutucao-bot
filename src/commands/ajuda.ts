@@ -15,7 +15,8 @@ export const ajudaCommand: SlashCommand = {
       `**Só pro orientador:**\n` +
       `\`/status\` — Mostra quem postou e quem não postou o check-in esta semana\n` +
       `\`/resumo #canal\` — Histórico de check-ins de um canal nas últimas 4 semanas\n` +
-      `\`/teste-lembrete\` — Dispara manualmente o job de lembrete de check-in`;
+      `\`/teste-lembrete\` — Dispara manualmente o job de lembrete de check-in\n` +
+      `\`/teste-boas-vindas\` — Simula a mensagem de boas-vindas no canal de entrada`;
 
     await interaction.reply({
       content: conteudo,
