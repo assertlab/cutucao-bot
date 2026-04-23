@@ -685,10 +685,10 @@ Antes de colocar o cutuCÃO em produção, verificar todos os itens:
 
 ### Fase 5 — Engenharia de Software
 
-- [ ] M1: Externalizar mensagens para arquivo JSON + serviço de templates
-- [ ] M2: Implementar padrão Repository para checkins e configurações
+- [x] M1: Externalizar mensagens para arquivo JSON + serviço de templates
+- [x] M2: Implementar padrão Repository para checkins e configurações
 - [ ] M3: Container de injeção de dependências
-- [ ] M4: Testes automatizados com Vitest (unitários + integração)
+- [x] M4: Testes automatizados com Vitest (unitários + integração)
 - [ ] M5: CI/CD com GitHub Actions (typecheck, testes, audit)
 - [ ] M6: Logs estruturados + alertas por DM em falhas de jobs
 

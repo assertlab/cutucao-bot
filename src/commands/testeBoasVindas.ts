@@ -1,5 +1,6 @@
 import { ChannelType, MessageFlags, SlashCommandBuilder, TextChannel } from "discord.js";
 import { config } from "../config";
+import { mensagens } from "../mensagens";
 import { mensagemBoasVindas } from "../utils/formatters";
 import { log, maskId } from "../utils/log";
 import { sanitizeDisplayName } from "../utils/validacao";
@@ -20,7 +21,9 @@ export const testeBoasVindasCommand: SlashCommand = {
 
     if (!canal) {
       await interaction.editReply(
-        `🐕 Canal \`#${config.canalBoasVindas}\` não encontrado no servidor.`,
+        mensagens.get("cmd_teste_boas_vindas_canal_nao_encontrado", {
+          canal: config.canalBoasVindas,
+        }),
       );
       return;
     }
@@ -34,13 +37,14 @@ export const testeBoasVindasCommand: SlashCommand = {
         allowedMentions: { parse: [] },
       });
       await interaction.editReply(
-        `🐕 Mensagem de boas-vindas enviada em <#${canal.id}> com o nome **${nome}**.`,
+        mensagens.get("cmd_teste_boas_vindas_sucesso", {
+          canal_id: canal.id,
+          nome,
+        }),
       );
     } catch (err) {
       log.error("Falha ao executar /teste-boas-vindas.", err);
-      await interaction.editReply(
-        "🐕 Algo deu errado ao enviar a mensagem. Verifique se o bot tem permissão de envio no canal.",
-      );
+      await interaction.editReply(mensagens.get("cmd_teste_boas_vindas_erro"));
     }
   },
 };

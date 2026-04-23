@@ -1,0 +1,112 @@
+{
+  "lembrete_semanal": {
+    "categoria": "lembrete",
+    "descricao": "Lembrete enviado toda segunda-feira às 09:00 em cada canal de orientação",
+    "texto": "🐕 **Au au! Check-in Semanal — {{data}}**\n\n{{saudacao}}Hora de atualizar seu progresso! Use o template abaixo:\n\n**O que fiz desde o último check-in:**\n-\n\n**O que pretendo fazer esta semana:**\n-\n\n**Onde estou travado (se aplicável):**\n-\n\n**Próximo marco/entrega:**\n-"
+  },
+  "template_checkin": {
+    "categoria": "lembrete",
+    "descricao": "Template de check-in exibido pelo comando /template",
+    "texto": "**O que fiz desde o último check-in:**\n-\n\n**O que pretendo fazer esta semana:**\n-\n\n**Onde estou travado (se aplicável):**\n-\n\n**Próximo marco/entrega:**\n-"
+  },
+  "cobranca_gentil": {
+    "categoria": "cobranca",
+    "descricao": "Enviado na quarta-feira para canais sem check-in desde segunda",
+    "texto": "🐕 Oi, sumido(a)! Seu check-in desta semana ainda não apareceu. Tá tudo bem por aí?\nSe precisar de ajuda com algo, é só latir por aqui!"
+  },
+  "boas_vindas": {
+    "categoria": "boas-vindas",
+    "descricao": "Enviado no canal #boas-vindas-e-regras quando um novo membro entra no servidor",
+    "texto": "🐕 Bem-vindo(a) à matilha do ASSERT Lab, **{{nome}}**!\n\nLeia as regras fixadas neste canal para entender como o servidor funciona.\nSe você é orientando(a), seu canal individual está na categoria **Orientações**.\n\nDúvidas? É só perguntar no #café!"
+  },
+  "resumo_semanal": {
+    "categoria": "resumo",
+    "descricao": "Resumo semanal enviado por DM ao orientador toda sexta-feira às 18:00",
+    "texto": "🐕 **Relatório da matilha — ASSERT Lab**\nSemana de {{inicio}} a {{fim}}\n\n✅ Postaram check-in ({{n_postaram}}/{{total}}):\n{{secao_postaram}}\n\n❌ Não postaram ({{n_nao_postaram}}/{{total}}):\n{{secao_nao_postaram}}\n\n📈 Taxa de adesão: {{taxa}}%"
+  },
+  "resumo_postaram_vazio": {
+    "categoria": "resumo",
+    "descricao": "Exibido na seção 'postaram' do resumo quando ninguém postou ainda",
+    "texto": "- (ninguém ainda 🐕)"
+  },
+  "resumo_nao_postaram_vazio": {
+    "categoria": "resumo",
+    "descricao": "Exibido na seção 'não postaram' do resumo e no /status quando todos estão em dia",
+    "texto": "- (todos em dia! 🎉)"
+  },
+  "alerta_inativos": {
+    "categoria": "cobranca",
+    "descricao": "DM enviada ao orientador na quarta-feira com orientandos inativos há 2+ semanas",
+    "texto": "🐕 Aviso da matilha: há orientandos inativos há 2+ semanas.\n\n{{linhas}}\n\nTalvez valha uma conversa pra entender o que tá rolando."
+  },
+  "cmd_ajuda": {
+    "categoria": "comando",
+    "descricao": "Conteúdo do comando /ajuda — lista todos os comandos disponíveis",
+    "texto": "🐕 **Comandos do cutuCÃO**\n\n**Para todos:**\n`/template` — Exibe o template de check-in para copiar e colar\n`/ajuda` — Exibe esta lista de comandos\n\n**Só pro orientador:**\n`/status` — Mostra quem postou e quem não postou o check-in esta semana\n`/resumo #canal` — Histórico de check-ins de um canal nas últimas 4 semanas\n`/teste-lembrete` — Dispara manualmente o job de lembrete de check-in\n`/teste-boas-vindas` — Simula a mensagem de boas-vindas no canal de entrada"
+  },
+  "cmd_status_sem_dados": {
+    "categoria": "comando",
+    "descricao": "Resposta do /status quando não há canais monitorados na semana atual",
+    "texto": "🐕 Nenhum canal monitorado encontrado para a semana de {{inicio}} a {{fim}}.\nOs lembretes de segunda-feira populam os registros automaticamente."
+  },
+  "cmd_status_conteudo": {
+    "categoria": "comando",
+    "descricao": "Resposta completa do /status com o status semanal de check-ins",
+    "texto": "🐕 **Status de check-in — Semana de {{inicio}} a {{fim}}**\n\n✅ Postaram ({{n_postaram}}/{{total}}):\n{{linhas_postaram}}\n\n❌ Não postaram ({{n_nao_postaram}}/{{total}}):\n{{linhas_nao}}\n\n📈 Taxa de adesão: {{taxa}}%"
+  },
+  "cmd_status_postaram_vazio": {
+    "categoria": "comando",
+    "descricao": "Exibido na seção 'postaram' do /status quando nenhum aluno postou ainda",
+    "texto": "- (nenhum ainda)"
+  },
+  "cmd_resumo_historico": {
+    "categoria": "comando",
+    "descricao": "Resposta do /resumo com histórico de check-ins de um canal",
+    "texto": "🐕 **Histórico de check-ins — {{nome}}**\nCanal: <#{{canal_id}}>\n\n{{linhas}}"
+  },
+  "cmd_erro_generico": {
+    "categoria": "erro",
+    "descricao": "Resposta de erro genérico ao executar um comando slash",
+    "texto": "🐕 Algo deu errado ao executar o comando."
+  },
+  "cmd_erro_guild_only": {
+    "categoria": "erro",
+    "descricao": "Resposta quando um comando é executado fora de um servidor",
+    "texto": "🐕 Este comando só funciona em um servidor."
+  },
+  "cmd_erro_canal_invalido": {
+    "categoria": "erro",
+    "descricao": "Resposta quando o canal selecionado não é um canal de orientação válido",
+    "texto": "🐕 O canal selecionado não é um canal de orientação válido.\nEscolha um canal da categoria **Orientações** com prefixo `phd-`, `msc-` ou `bsc-`."
+  },
+  "cmd_permissao_negada": {
+    "categoria": "erro",
+    "descricao": "Resposta quando um não-orientador tenta executar um comando restrito",
+    "texto": "🐕 Esse comando é só pro orientador!"
+  },
+  "cmd_teste_lembrete_sucesso": {
+    "categoria": "comando",
+    "descricao": "Resposta de sucesso do comando /teste-lembrete",
+    "texto": "🐕 Au au! Lembretes disparados manualmente. Confira os canais de orientação."
+  },
+  "cmd_teste_lembrete_erro": {
+    "categoria": "erro",
+    "descricao": "Resposta de erro do comando /teste-lembrete",
+    "texto": "🐕 Algo deu errado ao disparar os lembretes. Confira os logs."
+  },
+  "cmd_teste_boas_vindas_canal_nao_encontrado": {
+    "categoria": "erro",
+    "descricao": "Resposta quando o canal de boas-vindas não é encontrado no servidor",
+    "texto": "🐕 Canal `#{{canal}}` não encontrado no servidor."
+  },
+  "cmd_teste_boas_vindas_sucesso": {
+    "categoria": "comando",
+    "descricao": "Resposta de sucesso do /teste-boas-vindas após enviar a mensagem",
+    "texto": "🐕 Mensagem de boas-vindas enviada em <#{{canal_id}}> com o nome **{{nome}}**."
+  },
+  "cmd_teste_boas_vindas_erro": {
+    "categoria": "erro",
+    "descricao": "Resposta de erro do /teste-boas-vindas quando o envio falha",
+    "texto": "🐕 Algo deu errado ao enviar a mensagem. Verifique se o bot tem permissão de envio no canal."
+  }
+}

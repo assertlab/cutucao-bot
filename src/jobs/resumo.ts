@@ -1,10 +1,6 @@
 import { Client } from "discord.js";
 import { config } from "../config";
-import {
-  listarStatusSemana,
-  registrarLembrete,
-  semanasConsecutivasSemCheckin,
-} from "../database";
+import { checkinRepo } from "../repositories";
 import { listarCanaisOrientacao } from "../utils/canais";
 import { LinhaResumo, mensagemResumoSemanal } from "../utils/formatters";
 import { log, maskId } from "../utils/log";
@@ -30,10 +26,10 @@ export async function jobResumo(client: Client<true>): Promise<void> {
   const semana = currentIsoWeek(config.timezone);
 
   for (const { canal, nivel } of canais) {
-    registrarLembrete({ canalId: canal.id, nomeCanal: canal.name, nivel, semana });
+    checkinRepo.registrarLembrete({ canalId: canal.id, nomeCanal: canal.name, nivel, semana });
   }
 
-  const status = listarStatusSemana(semana);
+  const status = checkinRepo.listarStatusSemana(semana);
   const statusPorCanal = new Map(status.map((row) => [row.canalId, row]));
 
   const postaram: LinhaResumo[] = [];
@@ -45,7 +41,7 @@ export async function jobResumo(client: Client<true>): Promise<void> {
     if (realizou) {
       postaram.push({ nomeCanal: canal.name, nivel, semanasSemCheckin: 0 });
     } else {
-      const semanas = semanasConsecutivasSemCheckin(canal.id, semana);
+      const semanas = checkinRepo.semanasConsecutivasSemCheckin(canal.id, semana);
       naoPostaram.push({
         nomeCanal: canal.name,
         nivel,

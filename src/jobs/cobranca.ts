@@ -1,10 +1,6 @@
 import { Client } from "discord.js";
 import { config } from "../config";
-import {
-  listarStatusSemana,
-  registrarLembrete,
-  semanasConsecutivasSemCheckin,
-} from "../database";
+import { checkinRepo } from "../repositories";
 import { listarCanaisOrientacao } from "../utils/canais";
 import {
   LinhaResumo,
@@ -34,10 +30,10 @@ export async function jobCobranca(client: Client<true>): Promise<void> {
   const semana = currentIsoWeek(config.timezone);
 
   for (const { canal, nivel } of canais) {
-    registrarLembrete({ canalId: canal.id, nomeCanal: canal.name, nivel, semana });
+    checkinRepo.registrarLembrete({ canalId: canal.id, nomeCanal: canal.name, nivel, semana });
   }
 
-  const status = listarStatusSemana(semana);
+  const status = checkinRepo.listarStatusSemana(semana);
   const semCheckinIds = new Set(
     status.filter((row) => row.checkinRealizado === 0).map((row) => row.canalId),
   );
@@ -64,7 +60,7 @@ export async function jobCobranca(client: Client<true>): Promise<void> {
 
   const inativos: LinhaResumo[] = [];
   for (const { canal, nivel } of alvos) {
-    const semanas = semanasConsecutivasSemCheckin(canal.id, semana);
+    const semanas = checkinRepo.semanasConsecutivasSemCheckin(canal.id, semana);
     if (semanas >= 2) {
       inativos.push({
         nomeCanal: canal.name,

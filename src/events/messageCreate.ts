@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
 import { config } from "../config";
-import { registrarCheckin } from "../database";
+import { checkinRepo } from "../repositories";
 import { isCanalOrientacao } from "../utils/canais";
 import { log, maskChannelName } from "../utils/log";
 import { currentIsoWeek } from "../utils/semana";
@@ -23,7 +23,7 @@ export async function onMessageCreate(message: Message): Promise<void> {
   const semana = currentIsoWeek(config.timezone, message.createdAt);
 
   try {
-    const { novo } = registrarCheckin({
+    const { novo } = checkinRepo.registrarCheckin({
       canalId: canal.id,
       nomeCanal: canal.name,
       nivel,

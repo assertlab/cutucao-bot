@@ -1,6 +1,6 @@
 import { Client } from "discord.js";
 import { config } from "../config";
-import { registrarLembrete } from "../database";
+import { checkinRepo } from "../repositories";
 import { alunoIdFromCanal, listarCanaisOrientacao } from "../utils/canais";
 import { mensagemLembrete } from "../utils/formatters";
 import { log, maskChannelName } from "../utils/log";
@@ -40,7 +40,7 @@ export async function jobLembrete(client: Client<true>): Promise<void> {
       rotulo: "lembrete",
     },
     async ({ canal, nivel }) => {
-      registrarLembrete({
+      checkinRepo.registrarLembrete({
         canalId: canal.id,
         nomeCanal: canal.name,
         nivel,
