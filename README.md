@@ -121,6 +121,38 @@ O cutuCÃO espera encontrar no servidor:
 - Um canal chamado **`#boas-vindas-e-regras`** para mensagens de boas-vindas
 - O cargo do bot com permissão de **Ver Canal**, **Enviar Mensagens** e **Ler Histórico de Mensagens** na categoria Orientações
 
+## Como o cutuCÃO funciona
+
+O bot depende de convenções específicas no servidor Discord. Sem elas, ele não encontra os canais e não funciona.
+
+### Premissa: categoria e nomenclatura
+
+O servidor precisa ter uma **categoria** chamada exatamente **"Orientações"**. Dentro dela, cada orientando tem um canal privado com nome no formato `<nível>-<nome>`:
+
+```
+📁 Orientações
+   🔒 #phd-fagner-fernandes
+   🔒 #msc-alana-fernandes
+   🔒 #bsc-daniel-oliveira
+```
+
+Os três prefixos reconhecidos são `phd-` (doutorado), `msc-` (mestrado) e `bsc-` (graduação/TCC). Canais sem esses prefixos são ignorados. Novos canais criados nessa categoria são detectados automaticamente.
+
+### Ciclo semanal
+
+| Dia | Horário | O que acontece |
+|---|---|---|
+| Segunda | 09:00 | Lembrete com template de check-in em cada canal |
+| Segunda–Domingo | — | Qualquer mensagem do aluno no canal conta como check-in |
+| Quarta | 09:00 | Cobrança gentil nos canais sem check-in |
+| Sexta | 18:00 | Resumo semanal por DM ao orientador |
+
+### Detecção de check-in
+
+Qualquer mensagem do aluno (não do bot) no seu canal durante a semana conta como check-in. O bot detecta **atividade**, não exige formato. O template é uma sugestão, não uma obrigação técnica.
+
+Para detalhes completos sobre configuração, troubleshooting e operação, consulte o [Guia Operacional](docs/guia-operacional.md).
+
 ## Segurança
 
 O cutuCÃO lida com dados de alunos reais e foi projetado com segurança como prioridade:
