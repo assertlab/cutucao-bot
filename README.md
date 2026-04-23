@@ -117,7 +117,7 @@ cutucao-bot/
 
 O cutuCÃO espera encontrar no servidor:
 
-- Uma **categoria** chamada **"Orientações"** contendo canais privados com prefixo `phd-`, `msc-` ou `bsc-` (ex: `#msc-alana-fernandes`)
+- Uma **categoria** chamada **"Orientações"** contendo canais privados com prefixo `phd-`, `msc-` ou `bsc-` (ex: `#msc-natasha-romanoff`)
 - Um canal chamado **`#boas-vindas-e-regras`** para mensagens de boas-vindas
 - O cargo do bot com permissão de **Ver Canal**, **Enviar Mensagens** e **Ler Histórico de Mensagens** na categoria Orientações
 
