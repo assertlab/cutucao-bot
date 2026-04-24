@@ -188,7 +188,34 @@ Se o arquivo não existir, o bot inicia com valores padrão (retrocompatibilidad
 
 ### 4.3. Exemplos de customização
 
-**Múltiplas categorias (ex: Prof. Leopoldo com Orientações + Pesquisa):**
+**Uma categoria por nível (ex: servidor organizado por programa):**
+
+Alguns grupos preferem criar uma categoria separada para cada nível em vez de uma única categoria "Orientações". Com o `config.json`, isso funciona sem alterar nenhuma linha de código:
+
+```json
+{
+  "categorias": ["PhD", "MSc", "TCC"]
+}
+```
+
+Com essa configuração, o bot monitora canais com prefixo `phd-`/`msc-`/`bsc-` em **qualquer uma** das três categorias. A estrutura do servidor fica assim:
+
+```
+📁 PhD
+   🔒 #phd-jack-bauer
+   🔒 #phd-natasha-romanoff
+
+📁 MSc
+   🔒 #msc-harry-potter
+   🔒 #msc-hermione-granger
+
+📁 TCC
+   🔒 #bsc-ron-weasley
+```
+
+Isso permite que cada grupo organize o servidor como faz mais sentido para sua dinâmica — por nível, por linha de pesquisa, por semestre — sem depender de uma estrutura rígida de nomenclatura de categorias.
+
+**Múltiplas categorias misturando contextos (ex: Orientações + colaboradores externos):**
 ```json
 {
   "categorias": ["Orientações", "Colaboradores externos"]
