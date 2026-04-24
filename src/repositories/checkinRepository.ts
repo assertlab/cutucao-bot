@@ -1,7 +1,7 @@
 import Database from "better-sqlite3";
 import { isoWeekOffset } from "../utils/semana";
 
-export type Nivel = "phd" | "msc" | "bsc";
+export type Nivel = string;
 
 export interface CheckinRow {
   canalId: string;
@@ -31,14 +31,13 @@ export interface ICheckinRepository {
   listarHistoricoCanal(
     canalId: string,
   ): Array<{ semana: string; checkinRealizado: 0 | 1 }>;
-  limparHistoricoAntigo(meses: number): number;
 }
 
 const SCHEMA_SQL = `
   CREATE TABLE IF NOT EXISTS checkins (
     canalId TEXT NOT NULL,
     nomeCanal TEXT NOT NULL,
-    nivel TEXT NOT NULL CHECK (nivel IN ('phd', 'msc', 'bsc')),
+    nivel TEXT NOT NULL,
     semana TEXT NOT NULL,
     checkinRealizado INTEGER NOT NULL DEFAULT 0 CHECK (checkinRealizado IN (0, 1)),
     dataCheckin TEXT,
@@ -55,8 +54,6 @@ export class SQLiteCheckinRepository implements ICheckinRepository {
     getRow: Database.Statement;
     canaisDaSemana: Database.Statement;
     historicoCanal: Database.Statement;
-    limparAntigos: Database.Statement;
-    limparRowsSemCheckinAntigos: Database.Statement;
   };
 
   constructor(private readonly db: Database.Database) {
@@ -94,12 +91,6 @@ export class SQLiteCheckinRepository implements ICheckinRepository {
         WHERE canalId = ?
         ORDER BY semana DESC
         LIMIT 52
-      `),
-      limparAntigos: db.prepare(`
-        DELETE FROM checkins WHERE dataCheckin IS NOT NULL AND dataCheckin < ?
-      `),
-      limparRowsSemCheckinAntigos: db.prepare(`
-        DELETE FROM checkins WHERE checkinRealizado = 0 AND semana < ?
       `),
     };
   }
@@ -165,15 +156,5 @@ export class SQLiteCheckinRepository implements ICheckinRepository {
       semana: string;
       checkinRealizado: 0 | 1;
     }>;
-  }
-
-  limparHistoricoAntigo(meses: number): number {
-    const corte = new Date();
-    corte.setMonth(corte.getMonth() - meses);
-    const isoCorte = corte.toISOString();
-    const a = this.stmts.limparAntigos.run(isoCorte).changes;
-    const isoSemanaCorte = `${corte.getUTCFullYear() - 1}-W00`;
-    const b = this.stmts.limparRowsSemCheckinAntigos.run(isoSemanaCorte).changes;
-    return a + b;
   }
 }

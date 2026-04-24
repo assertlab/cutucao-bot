@@ -1,0 +1,36 @@
+{
+  "_info": "Copie este arquivo para config.json e ajuste conforme necessário. Campos não presentes usam os valores padrão abaixo.",
+
+  "categorias": ["Orientações"],
+  "_categorias_doc": "Lista de categorias do Discord a monitorar. Pode ter múltiplas categorias (ex: ['Orientações', 'Pesquisa']). Obrigatório ter ao menos uma.",
+
+  "prefixos": {
+    "phd": "Doutorado",
+    "msc": "Mestrado",
+    "bsc": "Graduação"
+  },
+  "_prefixos_doc": "Mapeamento de prefixo-de-canal → label exibida nos relatórios. Ex: canal '#phd-fulano' → exibe 'Doutorado'. Obrigatório ter ao menos um prefixo.",
+
+  "canal_boas_vindas": "boas-vindas-e-regras",
+  "_canal_boas_vindas_doc": "Nome do canal (sem #) onde o bot envia mensagens de boas-vindas a novos membros.",
+
+  "horarios": {
+    "lembrete": "0 9 * * 1",
+    "cobranca": "0 9 * * 3",
+    "resumo": "0 18 * * 5",
+    "_formato_doc": "Formato cron: 'minuto hora * * dia-da-semana'. Dia: 0=dom, 1=seg, ..., 5=sex, 6=sab."
+  },
+  "_horarios_doc": "Expressões cron para os três jobs automáticos. Fuso horário configurado via TZ no .env. Expressões inválidas impedem o bot de iniciar.",
+
+  "escalacao": {
+    "semanas_para_cobranca_dm": 2,
+    "semanas_para_alerta": 3
+  },
+  "_escalacao_doc": "semanas_para_cobranca_dm: após quantas semanas sem check-in o bot envia DM ao orientador. semanas_para_alerta: após quantas semanas o símbolo ⚠️ aparece no resumo.",
+
+  "visualizacao": {
+    "semanas_historico_padrao": 4,
+    "meses_resumo_padrao": 6
+  },
+  "_visualizacao_doc": "semanas_historico_padrao: quantas semanas o comando /resumo #canal exibe. meses_resumo_padrao: reservado para filtro de visualização no dashboard futuro (não deleta dados)."
+}

@@ -1,5 +1,5 @@
 import { ChannelType, MessageFlags, SlashCommandBuilder, TextChannel } from "discord.js";
-import { config } from "../config";
+import { appConfig } from "../config/appConfig";
 import { mensagens } from "../mensagens";
 import { mensagemBoasVindas } from "../utils/formatters";
 import { log, maskId } from "../utils/log";
@@ -16,13 +16,13 @@ export const testeBoasVindasCommand: SlashCommand = {
     log.info(`Comando /teste-boas-vindas disparado pelo orientador (${maskId(interaction.user.id)}).`);
 
     const canal = interaction.guild?.channels.cache.find(
-      (c) => c.type === ChannelType.GuildText && c.name === config.canalBoasVindas,
+      (c) => c.type === ChannelType.GuildText && c.name === appConfig.canal_boas_vindas,
     ) as TextChannel | undefined;
 
     if (!canal) {
       await interaction.editReply(
         mensagens.get("cmd_teste_boas_vindas_canal_nao_encontrado", {
-          canal: config.canalBoasVindas,
+          canal: appConfig.canal_boas_vindas,
         }),
       );
       return;

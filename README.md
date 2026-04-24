@@ -86,14 +86,25 @@ TZ=America/Recife
 
 Para obter os IDs, ative o **Modo de Desenvolvedor** no Discord (Configurações → Avançado) e clique com botão direito nos elementos para copiar.
 
-### 4. Compile e rode
+### 4. (Opcional) Customize o config.json
+
+O `config.json` na raiz do projeto permite ajustar o bot sem editar código. Ele já existe com os valores padrão. Use o `config.example.json` como referência documentada:
+
+```bash
+# Para ver todos os campos explicados:
+cat config.example.json
+```
+
+Campos configuráveis: categorias monitoradas, prefixos dos canais e seus labels nos relatórios, nome do canal de boas-vindas, horários dos jobs (cron), limiares de escalação e visualização.
+
+### 5. Compile e rode
 
 ```bash
 npm run build
 npm start
 ```
 
-O bot deve aparecer como online no seu servidor Discord.
+O bot deve aparecer como online no seu servidor Discord. No log inicial você verá quais categorias e quantos canais foram detectados.
 
 ## Estrutura do projeto
 
@@ -163,7 +174,7 @@ O cutuCÃO lida com dados de alunos reais e foi projetado com segurança como pr
 - **Sanitização** — Toda entrada de usuário é validada e sanitizada antes do uso.
 - **Rate limiting** — Limites internos evitam que bugs causem spam de mensagens.
 - **Circuit breaker** — Jobs que falham repetidamente são desabilitados temporariamente.
-- **Retenção limitada** — Dados com mais de 6 meses são automaticamente removidos.
+- **Retenção total** — Histórico mantido indefinidamente; sem deleção automática.
 - **Prepared statements** — Todas as queries SQL usam prepared statements.
 
 Consulte a [seção 9 da SPEC.md](SPEC.md) para detalhes completos.
@@ -225,11 +236,12 @@ O cutuCÃO foi criado para o ASSERT Lab, mas pode ser adaptado para qualquer gru
 
 1. Clone o repositório
 2. Crie uma aplicação de bot no Discord Developer Portal
-3. Configure o servidor Discord com uma categoria "Orientações" e canais com prefixo `phd-`/`msc-`/`bsc-`
+3. Configure o servidor Discord com uma categoria e canais com prefixo correspondente
 4. Preencha o `.env` com os dados do seu servidor
-5. Faça deploy
+5. Ajuste o `config.json` se quiser nomes de categorias ou prefixos diferentes dos padrões
+6. Faça deploy
 
-O bot detecta canais automaticamente — não é necessário alterar o código.
+O bot detecta canais automaticamente — sem alterar código. Consulte o `config.example.json` para todas as opções de customização.
 
 ## Licença
 

@@ -1,4 +1,5 @@
 import { ChannelType, MessageFlags, SlashCommandBuilder } from "discord.js";
+import { appConfig } from "../config/appConfig";
 import { config } from "../config";
 import { mensagens } from "../mensagens";
 import { checkinRepo } from "../repositories";
@@ -7,12 +8,10 @@ import { currentIsoWeek, formatWeekRange, isoWeekOffset } from "../utils/semana"
 import { displayNameFromChannel } from "../utils/validacao";
 import { SlashCommand } from "./types";
 
-const SEMANAS = 4;
-
 export const resumoCommand: SlashCommand = {
   data: new SlashCommandBuilder()
     .setName("resumo")
-    .setDescription("🐕 Mostra o histórico de check-ins de um canal nas últimas 4 semanas.")
+    .setDescription("🐕 Mostra o histórico de check-ins de um canal nas últimas semanas.")
     .addChannelOption((option) =>
       option
         .setName("canal")
@@ -41,16 +40,17 @@ export const resumoCommand: SlashCommand = {
       return;
     }
 
+    const semanas_n = appConfig.visualizacao.semanas_historico_padrao;
     const semanaAtual = currentIsoWeek(config.timezone);
     const semanas: string[] = [];
-    for (let i = 0; i < SEMANAS; i++) {
+    for (let i = 0; i < semanas_n; i++) {
       semanas.push(isoWeekOffset(semanaAtual, -i));
     }
 
     const historico = checkinRepo.listarHistoricoCanal(canal.id);
     const porSemana = new Map(historico.map((r) => [r.semana, r.checkinRealizado]));
 
-    const nomeLegivel = displayNameFromChannel(canal.name);
+    const nomeLegivel = displayNameFromChannel(canal.name, Object.keys(appConfig.prefixos));
     const linhas = semanas.map((semana) => {
       const { inicio, fim } = formatWeekRange(semana);
       const flag = porSemana.get(semana);

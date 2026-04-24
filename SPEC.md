@@ -496,19 +496,9 @@ O cutuCÃO lida com dados de alunos reais. Mesmo sendo um bot interno, as seguin
 
 **Retenção de dados:**
 
-- Registros de check-in mais antigos que **6 meses** devem ser automaticamente deletados (job de limpeza mensal).
-- Implementar comando `/config limpar-historico` para limpeza manual sob demanda.
-
-```typescript
-// Job mensal de limpeza
-function limparHistoricoAntigo(): void {
-  const seisAtras = new Date();
-  seisAtras.setMonth(seisAtras.getMonth() - 6);
-  db.prepare("DELETE FROM checkins WHERE dataCheckin < ?").run(
-    seisAtras.toISOString(),
-  );
-}
-```
+- O histórico de check-ins é mantido **indefinidamente** no banco de dados. Não há deleção automática.
+- O campo `visualizacao.meses_resumo_padrao` em `config.json` controla o **filtro de visualização** no dashboard futuro — não é usado para deletar dados.
+- Quem precisar limpar o histórico manualmente pode usar um cliente SQLite diretamente no arquivo de banco.
 
 **Logging seguro:**
 
@@ -638,7 +628,7 @@ Antes de colocar o cutuCÃO em produção, verificar todos os itens:
 - [ ] 2FA habilitado no Discord Developer Portal, GitHub e plataforma de hospedagem
 - [ ] GitHub Secret Scanning habilitado (se repositório público)
 - [ ] Backup do banco de dados configurado
-- [ ] Job de limpeza de dados antigos implementado
+- [x] Retenção de dados — histórico mantido indefinidamente (sem deleção automática)
 
 ---
 
@@ -666,10 +656,10 @@ Antes de colocar o cutuCÃO em produção, verificar todos os itens:
 - [x] Comando `/status` (ephemeral)
 - [x] Comando `/resumo #canal` (ephemeral)
 - [x] Comando `/ajuda`
-- [x] Job de limpeza de dados antigos (seção 9.6)
 
 ### Fase 3 — Configuração dinâmica
 
+- [x] `config.json` externo: categorias, prefixos+labels, canal de boas-vindas, horários, escalação, visualização
 - [ ] Comando `/config canais` com validação
 - [ ] Comando `/config orientador` com validação de ID
 - [ ] Comando `/config horarios` com validação de cron (seção 9.4)
@@ -691,6 +681,40 @@ Antes de colocar o cutuCÃO em produção, verificar todos os itens:
 - [x] M4: Testes automatizados com Vitest (unitários + integração)
 - [ ] M5: CI/CD com GitHub Actions (typecheck, testes, audit)
 - [ ] M6: Logs estruturados + alertas por DM em falhas de jobs
+
+### config.json — estrutura e campos
+
+O arquivo `config.json` na raiz do projeto (versionado no Git) permite customizar o bot sem editar código:
+
+```json
+{
+  "categorias": ["Orientações"],
+  "prefixos": { "phd": "Doutorado", "msc": "Mestrado", "bsc": "Graduação" },
+  "canal_boas_vindas": "boas-vindas-e-regras",
+  "horarios": {
+    "lembrete": "0 9 * * 1",
+    "cobranca": "0 9 * * 3",
+    "resumo": "0 18 * * 5"
+  },
+  "escalacao": {
+    "semanas_para_cobranca_dm": 2,
+    "semanas_para_alerta": 3
+  },
+  "visualizacao": {
+    "semanas_historico_padrao": 4,
+    "meses_resumo_padrao": 6
+  }
+}
+```
+
+- **`categorias`**: lista de nomes de categorias Discord a monitorar (suporta múltiplas).
+- **`prefixos`**: mapeamento prefixo→label; as chaves determinam os prefixos válidos de canais, os valores são exibidos nos relatórios ("Doutorado" em vez de "phd").
+- **`canal_boas_vindas`**: nome do canal (sem `#`) para mensagens de boas-vindas.
+- **`horarios`**: expressões cron para os três jobs. Expressão inválida impede o bot de iniciar.
+- **`escalacao`**: limiares de inatividade para envio de DM ao orientador e exibição de ⚠️.
+- **`visualizacao`**: número de semanas exibidas pelo `/resumo #canal` e meses para filtro futuro no dashboard.
+
+Se `config.json` não existir, o bot usa os valores padrão acima (retrocompatibilidade total).
 
 ### Fase 6 — Dashboard e gestão
 

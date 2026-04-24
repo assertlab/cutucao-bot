@@ -31,20 +31,9 @@ export const config = {
   orientadorId,
   databasePath: process.env.DATABASE_PATH?.trim() || "./data/cutucao.db",
   timezone: process.env.TZ?.trim() || "America/Recife",
-  categoriaOrientacoes: "Orientações",
-  canalBoasVindas: "boas-vindas-e-regras",
-  horarios: {
-    lembrete: "0 9 * * 1",
-    cobranca: "0 9 * * 3",
-    resumo: "0 18 * * 5",
-    limpeza: "0 3 1 * *",
-  },
   limites: {
     mensagensPorCiclo: 20,
     dmsPorCiclo: 5,
     cooldownMs: 1000,
-  },
-  retencao: {
-    meses: 6,
   },
 } as const;

@@ -53,7 +53,7 @@ describe("isValidCron", () => {
   });
 });
 
-describe("isOrientacaoChannelName", () => {
+describe("isOrientacaoChannelName — prefixos padrão", () => {
   it("accepts phd- prefixed names", () => {
     expect(isOrientacaoChannelName("phd-joao-silva")).toBe(true);
   });
@@ -74,7 +74,19 @@ describe("isOrientacaoChannelName", () => {
   });
 });
 
-describe("nivelFromChannelName", () => {
+describe("isOrientacaoChannelName — prefixos customizados", () => {
+  it("accepts custom prefix when provided", () => {
+    expect(isOrientacaoChannelName("pos-joao-silva", ["pos", "phd"])).toBe(true);
+  });
+  it("rejects default phd when not in custom list", () => {
+    expect(isOrientacaoChannelName("phd-joao-silva", ["pos"])).toBe(false);
+  });
+  it("returns false for empty prefixes array", () => {
+    expect(isOrientacaoChannelName("phd-joao-silva", [])).toBe(false);
+  });
+});
+
+describe("nivelFromChannelName — prefixos padrão", () => {
   it("extracts phd", () => {
     expect(nivelFromChannelName("phd-joao-silva")).toBe("phd");
   });
@@ -86,6 +98,15 @@ describe("nivelFromChannelName", () => {
   });
   it("returns null for unrecognized prefix", () => {
     expect(nivelFromChannelName("geral")).toBeNull();
+  });
+});
+
+describe("nivelFromChannelName — prefixos customizados", () => {
+  it("extracts custom prefix", () => {
+    expect(nivelFromChannelName("pos-joao-silva", ["pos", "phd"])).toBe("pos");
+  });
+  it("returns null when prefix not in custom list", () => {
+    expect(nivelFromChannelName("phd-joao", ["pos"])).toBeNull();
   });
 });
 
@@ -108,7 +129,7 @@ describe("sanitizeDisplayName", () => {
   });
 });
 
-describe("displayNameFromChannel", () => {
+describe("displayNameFromChannel — prefixos padrão", () => {
   it("converts msc-alana-fernandes to Alana Fernandes", () => {
     expect(displayNameFromChannel("msc-alana-fernandes")).toBe("Alana Fernandes");
   });
@@ -120,5 +141,14 @@ describe("displayNameFromChannel", () => {
   });
   it("strips markdown from output", () => {
     expect(displayNameFromChannel("msc-user-name")).not.toContain("-");
+  });
+});
+
+describe("displayNameFromChannel — prefixos customizados", () => {
+  it("strips custom prefix from channel name", () => {
+    expect(displayNameFromChannel("pos-joao-silva", ["pos"])).toBe("Joao Silva");
+  });
+  it("uses default prefixes when none passed", () => {
+    expect(displayNameFromChannel("phd-maria")).toBe("Maria");
   });
 });

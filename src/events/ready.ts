@@ -1,4 +1,5 @@
 import { Client } from "discord.js";
+import { appConfig } from "../config/appConfig";
 import { commands } from "../commands";
 import { config } from "../config";
 import { log } from "../utils/log";
@@ -31,7 +32,7 @@ export async function onReady(client: Client<true>): Promise<void> {
 
   const canais = listarCanaisOrientacao(guild);
   log.info(
-    `Categoria "${config.categoriaOrientacoes}" detectada com ${canais.length} canal(is) de orientação.`,
+    `Categorias ${JSON.stringify(appConfig.categorias)} detectadas com ${canais.length} canal(is) de orientação.`,
   );
 
   try {
