@@ -8,15 +8,17 @@ Este documento descreve todas as premissas, convenções e configurações que o
 
 O cutuCÃO não é um bot genérico — ele foi projetado para um contexto específico: acompanhamento de orientandos em grupos de pesquisa acadêmica. Para funcionar, ele depende de uma estrutura de servidor Discord que siga convenções de nomenclatura e organização.
 
-### 1.1. Categoria "Orientações"
+### 1.1. Categorias monitoradas
 
-O bot busca **por nome** uma categoria chamada exatamente **"Orientações"** (com acento). Todos os canais de orientação individual devem estar dentro desta categoria.
+Por padrão, o bot monitora uma categoria chamada **"Orientações"** (com acento). A lista de categorias é configurável via `config.json` (campo `categorias`) — é possível usar um nome diferente ou múltiplas categorias simultaneamente (veja a seção 4).
 
-Se a categoria não existir ou tiver nome diferente, o bot não encontra os canais e não envia lembretes. O log de inicialização mostra se a detecção foi bem-sucedida:
+O log de inicialização mostra quais categorias foram detectadas e quantos canais foram encontrados:
 
 ```
-🐕 Categoria "Orientações" detectada com 16 canal(is) de orientação.
+🐕 Categorias ["Orientações"] detectadas com 16 canal(is) de orientação.
 ```
+
+Se nenhum canal for encontrado, as causas mais comuns são: nome da categoria diferente do configurado em `config.json`, canais sem prefixo válido, ou falta de permissão de Ver Canal.
 
 ### 1.2. Convenção de nomenclatura dos canais
 
@@ -26,13 +28,15 @@ Dentro da categoria "Orientações", o bot monitora **apenas** canais cujo nome 
 <nível>-<nome-do-aluno>
 ```
 
-Onde `<nível>` é um dos três prefixos obrigatórios:
+Onde `<nível>` é um dos prefixos configurados. Os prefixos padrão são:
 
-| Prefixo | Significado     | Exemplo                 |
-| ------- | --------------- | ----------------------- |
-| `phd-`  | Doutorado       | `#phd-jack-bauer` |
-| `msc-`  | Mestrado        | `#msc-natasha-romanoff`  |
-| `bsc-`  | Graduação (TCC) | `#bsc-harry-potter`  |
+| Prefixo | Label nos relatórios | Exemplo                 |
+| ------- | -------------------- | ----------------------- |
+| `phd-`  | Doutorado            | `#phd-jack-bauer`       |
+| `msc-`  | Mestrado             | `#msc-natasha-romanoff` |
+| `bsc-`  | Graduação (TCC)      | `#bsc-harry-potter`     |
+
+Os prefixos (e os labels que aparecem nos relatórios) são configuráveis via `config.json` (campo `prefixos`). Veja a seção 4 para exemplos.
 
 **Regras do nome:**
 
@@ -123,6 +127,8 @@ A conversão capitaliza cada palavra e remove o prefixo de nível.
 | Segunda a domingo | —       | Bot **detecta** mensagens dos alunos como check-in            |
 | Quarta            | 09:00   | Bot envia **cobrança gentil** nos canais sem check-in         |
 | Sexta             | 18:00   | Bot envia **resumo semanal** por DM ao orientador             |
+
+Os horários são configuráveis via `config.json` (campo `horarios`). Veja a seção 4 para detalhes e exemplos.
 
 ### 3.3. Escalação por inatividade
 
@@ -277,7 +283,7 @@ O bot usa SQLite com WAL mode. O banco é criado automaticamente na primeira exe
 | `id`                            | INTEGER (PK)    | ID auto-incremento                           |
 | `canalId`                       | TEXT            | ID do canal Discord                          |
 | `nomeCanal`                     | TEXT            | Nome do canal (ex: "msc-natasha-romanoff")    |
-| `nivel`                         | TEXT            | "phd", "msc" ou "bsc"                        |
+| `nivel`                         | TEXT            | Prefixo do canal (ex: "phd", "msc", "bsc")   |
 | `semana`                        | TEXT            | Semana ISO (ex: "2026-W17")                  |
 | `checkinRealizado`              | INTEGER         | 0 = não postou, 1 = postou                   |
 | `dataCheckin`                   | TEXT (nullable) | ISO timestamp do primeiro check-in da semana |
@@ -320,7 +326,7 @@ Checklist completa para colocar o cutuCÃO no ar em um novo servidor:
 - [ ] Criar o `.env` com as 5 variáveis
 - [ ] (Opcional) Copiar `config.example.json` para `config.json` e ajustar
 - [ ] Rodar `npm run build && npm start`
-- [ ] Verificar que o log mostra: "Categoria 'Orientações' detectada com X canal(is)"
+- [ ] Verificar que o log mostra: "Categorias [...] detectadas com X canal(is)"
 - [ ] Testar com `/teste-lembrete`
 
 ### Na hospedagem (Railway ou similar)
@@ -362,8 +368,8 @@ Quando um aluno defende ou sai do grupo:
 
 **Causas possíveis:**
 
-- A categoria não se chama exatamente "Orientações" (verificar acento e capitalização)
-- Os canais não têm prefixo `phd-`, `msc-` ou `bsc-`
+- O nome da categoria não coincide com o configurado em `config.json` (padrão: "Orientações" — verificar acento e capitalização)
+- Os canais não têm um dos prefixos configurados em `config.json` (padrão: `phd-`, `msc-`, `bsc-`)
 - O bot não tem permissão de Ver Canal na categoria
 
 ### "Missing Access" ao enviar mensagens
@@ -380,7 +386,7 @@ Verificar nos logs do Railway se as variáveis de ambiente estão configuradas. 
 
 ### Check-in não é detectado
 
-O bot só detecta mensagens em canais que estão dentro da categoria "Orientações" e cujo nome segue o padrão. Mensagens do próprio bot ou de outros bots são ignoradas.
+O bot só detecta mensagens em canais que estão dentro das categorias configuradas em `config.json` e cujo nome começa com um dos prefixos configurados. Mensagens do próprio bot ou de outros bots são ignoradas.
 
 ### O resumo semanal não chega
 

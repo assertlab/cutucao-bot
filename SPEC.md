@@ -660,9 +660,11 @@ Antes de colocar o cutuCÃO em produção, verificar todos os itens:
 ### Fase 3 — Configuração dinâmica
 
 - [x] `config.json` externo: categorias, prefixos+labels, canal de boas-vindas, horários, escalação, visualização
-- [ ] Comando `/config canais` com validação
+- [x] Configuração de canais monitorados via `config.json` (categorias + prefixos)
+- [x] Configuração de horários via `config.json` com validação de cron na inicialização
+- [ ] Comando `/config canais` para reconfiguração em tempo real (sem reiniciar)
 - [ ] Comando `/config orientador` com validação de ID
-- [ ] Comando `/config horarios` com validação de cron (seção 9.4)
+- [ ] Comando `/config horarios` para reconfiguração em tempo real (sem reiniciar)
 - [ ] Detecção automática de novos canais na categoria
 - [ ] Habilitar Dependabot/Renovate no GitHub
 
