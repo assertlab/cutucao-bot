@@ -8,22 +8,38 @@ export function isValidCron(expr: string): boolean {
   return safePattern.test(trimmed);
 }
 
-export function isOrientacaoChannelName(name: string): boolean {
-  return /^(phd|msc|bsc)-[a-z0-9-]+$/.test(name);
+export function isOrientacaoChannelName(
+  name: string,
+  prefixes: string[] = ["phd", "msc", "bsc"],
+): boolean {
+  if (prefixes.length === 0) return false;
+  const pattern = new RegExp(`^(${prefixes.join("|")})-[a-z0-9-]+$`);
+  return pattern.test(name);
 }
 
-export function nivelFromChannelName(name: string): "phd" | "msc" | "bsc" | null {
-  const match = /^(phd|msc|bsc)-/.exec(name);
-  if (!match) return null;
-  return match[1] as "phd" | "msc" | "bsc";
+export function nivelFromChannelName(
+  name: string,
+  prefixes: string[] = ["phd", "msc", "bsc"],
+): string | null {
+  for (const prefix of prefixes) {
+    if (name.startsWith(`${prefix}-`)) return prefix;
+  }
+  return null;
 }
 
 export function sanitizeDisplayName(name: string): string {
   return name.replace(/[*_~`|>@#\\]/g, "").slice(0, 80);
 }
 
-export function displayNameFromChannel(channelName: string): string {
-  const parts = channelName.replace(/^(phd|msc|bsc)-/, "").split("-");
+export function displayNameFromChannel(
+  channelName: string,
+  prefixes: string[] = ["phd", "msc", "bsc"],
+): string {
+  const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const prefixPattern = prefixes.length > 0
+    ? new RegExp(`^(${prefixes.map(escapeRegex).join("|")})-`)
+    : /^[a-z]+-/;
+  const parts = channelName.replace(prefixPattern, "").split("-");
   const pretty = parts
     .filter((p) => p.length > 0)
     .map((p) => p.charAt(0).toUpperCase() + p.slice(1))

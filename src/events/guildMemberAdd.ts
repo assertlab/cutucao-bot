@@ -1,4 +1,5 @@
 import { ChannelType, GuildMember, TextChannel } from "discord.js";
+import { appConfig } from "../config/appConfig";
 import { config } from "../config";
 import { mensagemBoasVindas } from "../utils/formatters";
 import { log } from "../utils/log";
@@ -8,11 +9,11 @@ export async function onGuildMemberAdd(member: GuildMember): Promise<void> {
   if (member.guild.id !== config.guildId) return;
 
   const canal = member.guild.channels.cache.find(
-    (c) => c.type === ChannelType.GuildText && c.name === config.canalBoasVindas,
+    (c) => c.type === ChannelType.GuildText && c.name === appConfig.canal_boas_vindas,
   ) as TextChannel | undefined;
 
   if (!canal) {
-    log.warn(`Canal de boas-vindas "${config.canalBoasVindas}" não encontrado.`);
+    log.warn(`Canal de boas-vindas "${appConfig.canal_boas_vindas}" não encontrado.`);
     return;
   }
 

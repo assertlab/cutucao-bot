@@ -123,7 +123,6 @@ A conversão capitaliza cada palavra e remove o prefixo de nível.
 | Segunda a domingo | —       | Bot **detecta** mensagens dos alunos como check-in            |
 | Quarta            | 09:00   | Bot envia **cobrança gentil** nos canais sem check-in         |
 | Sexta             | 18:00   | Bot envia **resumo semanal** por DM ao orientador             |
-| Dia 1 de cada mês | 03:00   | Bot **limpa** registros com mais de 6 meses                   |
 
 ### 3.3. Escalação por inatividade
 
@@ -139,7 +138,92 @@ O bot nunca pune ou restringe o aluno — ele apenas torna a inatividade visíve
 
 ---
 
-## 4. Variáveis de ambiente
+## 4. config.json — configuração por arquivo
+
+O arquivo `config.json` na raiz do projeto complementa as variáveis de ambiente, permitindo customizar o comportamento do bot **sem alterar código**. Diferente do `.env`, o `config.json` é versionado no Git: cada instância mantém seu próprio arquivo com os valores corretos para o servidor.
+
+Se o arquivo não existir, o bot inicia com valores padrão (retrocompatibilidade total).
+
+### 4.1. Estrutura do config.json
+
+```json
+{
+  "categorias": ["Orientações"],
+  "prefixos": {
+    "phd": "Doutorado",
+    "msc": "Mestrado",
+    "bsc": "Graduação"
+  },
+  "canal_boas_vindas": "boas-vindas-e-regras",
+  "horarios": {
+    "lembrete": "0 9 * * 1",
+    "cobranca": "0 9 * * 3",
+    "resumo": "0 18 * * 5"
+  },
+  "escalacao": {
+    "semanas_para_cobranca_dm": 2,
+    "semanas_para_alerta": 3
+  },
+  "visualizacao": {
+    "semanas_historico_padrao": 4,
+    "meses_resumo_padrao": 6
+  }
+}
+```
+
+### 4.2. Descrição dos campos
+
+| Campo | Padrão | Descrição |
+| ----- | ------ | --------- |
+| `categorias` | `["Orientações"]` | Lista de categorias Discord a monitorar. Pode ter múltiplas. |
+| `prefixos` | `{phd, msc, bsc}` | Prefixo de canal → label nos relatórios. A chave é usada no nome do canal; o valor aparece nos relatórios. |
+| `canal_boas_vindas` | `boas-vindas-e-regras` | Nome do canal (sem `#`) para mensagens de boas-vindas. |
+| `horarios.lembrete` | `0 9 * * 1` | Cron: segunda 09:00 |
+| `horarios.cobranca` | `0 9 * * 3` | Cron: quarta 09:00 |
+| `horarios.resumo` | `0 18 * * 5` | Cron: sexta 18:00 |
+| `escalacao.semanas_para_cobranca_dm` | `2` | Semanas de inatividade para enviar DM ao orientador |
+| `escalacao.semanas_para_alerta` | `3` | Semanas de inatividade para exibir ⚠️ no resumo |
+| `visualizacao.semanas_historico_padrao` | `4` | Semanas exibidas pelo `/resumo #canal` |
+| `visualizacao.meses_resumo_padrao` | `6` | Reservado para filtro de visualização no dashboard futuro |
+
+### 4.3. Exemplos de customização
+
+**Múltiplas categorias (ex: Prof. Leopoldo com Orientações + Pesquisa):**
+```json
+{
+  "categorias": ["Orientações", "Colaboradores externos"]
+}
+```
+
+**Prefixos customizados com labels em português:**
+```json
+{
+  "prefixos": {
+    "phd": "Doutorado",
+    "msc": "Mestrado",
+    "bsc": "Iniciação Científica"
+  }
+}
+```
+
+**Horário de lembrete às 8h em vez de 9h:**
+```json
+{
+  "horarios": {
+    "lembrete": "0 8 * * 1"
+  }
+}
+```
+
+### 4.4. Validação
+
+Se uma **cron expression** for inválida, o bot se recusa a iniciar e mostra mensagem de erro indicando qual campo está incorreto. Campos ausentes no `config.json` usam os valores padrão automaticamente.
+
+Use `config.example.json` na raiz do repositório como referência documentada de todos os campos.
+
+---
+
+## 5. Variáveis de ambiente
 
 | Variável        | Obrigatória | Descrição                                                              | Exemplo              |
 | --------------- | ----------- | ---------------------------------------------------------------------- | -------------------- |
@@ -155,7 +239,7 @@ O bot nunca pune ou restringe o aluno — ele apenas torna a inatividade visíve
 
 ---
 
-## 5. Estrutura do banco de dados
+## 6. Estrutura do banco de dados
 
 O bot usa SQLite com WAL mode. O banco é criado automaticamente na primeira execução.
 
@@ -174,13 +258,13 @@ O bot usa SQLite com WAL mode. O banco é criado automaticamente na primeira exe
 
 **Índices:** `(semana, canalId)` para consultas rápidas por semana.
 
-**Retenção:** Registros com mais de 6 meses são automaticamente removidos pelo job de limpeza mensal.
+**Retenção:** O histórico é mantido indefinidamente. Use o campo `visualizacao.meses_resumo_padrao` em `config.json` para controle de visualização no dashboard futuro.
 
 **O que NÃO é armazenado:** conteúdo de mensagens, IDs de usuários dos alunos, e-mails, ou qualquer dado pessoal além do nome do canal (que é público no servidor).
 
 ---
 
-## 6. Configurando uma nova instância
+## 7. Configurando uma nova instância
 
 Checklist completa para colocar o cutuCÃO no ar em um novo servidor:
 
@@ -207,6 +291,7 @@ Checklist completa para colocar o cutuCÃO no ar em um novo servidor:
 - [ ] Clonar o repositório
 - [ ] Rodar `npm install`
 - [ ] Criar o `.env` com as 5 variáveis
+- [ ] (Opcional) Copiar `config.example.json` para `config.json` e ajustar
 - [ ] Rodar `npm run build && npm start`
 - [ ] Verificar que o log mostra: "Categoria 'Orientações' detectada com X canal(is)"
 - [ ] Testar com `/teste-lembrete`
@@ -221,7 +306,7 @@ Checklist completa para colocar o cutuCÃO no ar em um novo servidor:
 
 ---
 
-## 7. Adicionando um novo orientando
+## 8. Adicionando um novo orientando
 
 Quando um novo aluno entra no grupo:
 
@@ -230,17 +315,17 @@ Quando um novo aluno entra no grupo:
 3. O cutuCÃO detecta automaticamente — não precisa reiniciar
 4. Na próxima segunda às 09:00, o aluno receberá o lembrete
 
-## 8. Removendo um orientando
+## 9. Removendo um orientando
 
 Quando um aluno defende ou sai do grupo:
 
 1. O canal pode ser deletado ou movido para outra categoria (ex: "Alumni")
-2. Se deletado, os registros de check-in permanecem no banco até a limpeza automática (6 meses)
+2. Se deletado, os registros de check-in permanecem no banco indefinidamente
 3. Se movido para outra categoria, o bot para de monitorá-lo automaticamente
 
 ---
 
-## 9. Troubleshooting
+## 10. Troubleshooting
 
 ### O bot não encontra os canais
 

@@ -1,7 +1,7 @@
 import { Client } from "discord.js";
 import cron, { ScheduledTask } from "node-cron";
+import { appConfig } from "../config/appConfig";
 import { config } from "../config";
-import { checkinRepo } from "../repositories";
 import { log } from "../utils/log";
 import { jobCobranca } from "./cobranca";
 import { jobLembrete } from "./lembrete";
@@ -34,13 +34,9 @@ function agendar(
 }
 
 export function iniciarAgendador(client: Client<true>): void {
-  agendar("lembrete", config.horarios.lembrete, () => jobLembrete(client));
-  agendar("cobranca", config.horarios.cobranca, () => jobCobranca(client));
-  agendar("resumo", config.horarios.resumo, () => jobResumo(client));
-  agendar("limpeza", config.horarios.limpeza, async () => {
-    const removidos = checkinRepo.limparHistoricoAntigo(config.retencao.meses);
-    log.info(`Limpeza de histórico: ${removidos} registro(s) removido(s).`);
-  });
+  agendar("lembrete", appConfig.horarios.lembrete, () => jobLembrete(client));
+  agendar("cobranca", appConfig.horarios.cobranca, () => jobCobranca(client));
+  agendar("resumo", appConfig.horarios.resumo, () => jobResumo(client));
 }
 
 export function pararAgendador(): void {

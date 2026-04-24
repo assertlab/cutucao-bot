@@ -7,12 +7,13 @@ import {
   PermissionFlagsBits,
   TextChannel,
 } from "discord.js";
+import { appConfig } from "../config/appConfig";
 import { config } from "../config";
 import { isOrientacaoChannelName, nivelFromChannelName } from "./validacao";
 
 export interface CanalOrientacao {
   canal: TextChannel;
-  nivel: "phd" | "msc" | "bsc";
+  nivel: string;
 }
 
 export function isCanalOrientacao(canal: GuildBasedChannel): canal is TextChannel {
@@ -20,18 +21,20 @@ export function isCanalOrientacao(canal: GuildBasedChannel): canal is TextChanne
   const parent = canal.parent;
   if (!parent || parent.type !== ChannelType.GuildCategory) return false;
   if (!isOrientacaoCategory(parent)) return false;
-  return isOrientacaoChannelName(canal.name);
+  return isOrientacaoChannelName(canal.name, Object.keys(appConfig.prefixos));
 }
 
 export function isOrientacaoCategory(category: CategoryChannel): boolean {
-  return category.name.toLowerCase() === config.categoriaOrientacoes.toLowerCase();
+  const nome = category.name.toLowerCase();
+  return appConfig.categorias.some((cat) => cat.toLowerCase() === nome);
 }
 
 export function listarCanaisOrientacao(guild: Guild): CanalOrientacao[] {
+  const prefixes = Object.keys(appConfig.prefixos);
   const resultado: CanalOrientacao[] = [];
   for (const canal of guild.channels.cache.values()) {
     if (!isCanalOrientacao(canal)) continue;
-    const nivel = nivelFromChannelName(canal.name);
+    const nivel = nivelFromChannelName(canal.name, prefixes);
     if (!nivel) continue;
     resultado.push({ canal, nivel });
   }

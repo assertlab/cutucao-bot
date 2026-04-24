@@ -1,4 +1,5 @@
 import { Client } from "discord.js";
+import { appConfig } from "../config/appConfig";
 import { config } from "../config";
 import { checkinRepo } from "../repositories";
 import { listarCanaisOrientacao } from "../utils/canais";
@@ -61,7 +62,7 @@ export async function jobCobranca(client: Client<true>): Promise<void> {
   const inativos: LinhaResumo[] = [];
   for (const { canal, nivel } of alvos) {
     const semanas = checkinRepo.semanasConsecutivasSemCheckin(canal.id, semana);
-    if (semanas >= 2) {
+    if (semanas >= appConfig.escalacao.semanas_para_cobranca_dm) {
       inativos.push({
         nomeCanal: canal.name,
         nivel,

@@ -1,0 +1,22 @@
+{
+  "categorias": ["Orientações"],
+  "prefixos": {
+    "phd": "Doutorado",
+    "msc": "Mestrado",
+    "bsc": "Graduação"
+  },
+  "canal_boas_vindas": "boas-vindas-e-regras",
+  "horarios": {
+    "lembrete": "0 9 * * 1",
+    "cobranca": "0 9 * * 3",
+    "resumo": "0 18 * * 5"
+  },
+  "escalacao": {
+    "semanas_para_cobranca_dm": 2,
+    "semanas_para_alerta": 3
+  },
+  "visualizacao": {
+    "semanas_historico_padrao": 4,
+    "meses_resumo_padrao": 6
+  }
+}

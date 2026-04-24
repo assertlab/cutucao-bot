@@ -1,10 +1,11 @@
+import { appConfig, labelDoNivel } from "../config/appConfig";
 import { mensagens } from "../mensagens";
 import { formatWeekRange } from "./semana";
 import { displayNameFromChannel } from "./validacao";
 
 export interface LinhaResumo {
   nomeCanal: string;
-  nivel: "phd" | "msc" | "bsc";
+  nivel: string;
   semanasSemCheckin: number;
 }
 
@@ -36,12 +37,13 @@ export function mensagemResumoSemanal(
   const total = postaram.length + naoPostaram.length;
   const taxa = total === 0 ? 0 : Math.round((postaram.length / total) * 100);
   const { inicio, fim } = formatWeekRange(isoWeek);
+  const prefixes = Object.keys(appConfig.prefixos);
 
   const formataLinha = (linha: LinhaResumo, mostraSemanas = false): string => {
-    const nome = displayNameFromChannel(linha.nomeCanal);
-    const base = `- ${nome} (${linha.nivel})`;
+    const nome = displayNameFromChannel(linha.nomeCanal, prefixes);
+    const base = `- ${nome} (${labelDoNivel(linha.nivel)})`;
     if (!mostraSemanas) return base;
-    const alerta = linha.semanasSemCheckin >= 3 ? "⚠️ " : "";
+    const alerta = linha.semanasSemCheckin >= appConfig.escalacao.semanas_para_alerta ? "⚠️ " : "";
     const plural = linha.semanasSemCheckin === 1 ? "semana" : "semanas";
     return `${base} — ${alerta}${linha.semanasSemCheckin} ${plural} sem check-in`;
   };
@@ -67,10 +69,11 @@ export function mensagemResumoSemanal(
 }
 
 export function mensagemAlertaInativos(inativos: LinhaResumo[]): string {
+  const prefixes = Object.keys(appConfig.prefixos);
   const linhas = inativos
     .map((l) => {
-      const nome = displayNameFromChannel(l.nomeCanal);
-      return `- ${nome} (${l.nivel}) — ${l.semanasSemCheckin} semanas sem check-in`;
+      const nome = displayNameFromChannel(l.nomeCanal, prefixes);
+      return `- ${nome} (${labelDoNivel(l.nivel)}) — ${l.semanasSemCheckin} semanas sem check-in`;
     })
     .join("\n");
   return mensagens.get("alerta_inativos", { linhas });
@@ -84,9 +87,10 @@ export function mensagemStatus(
   const total = postaram.length + naoPostaram.length;
   const taxa = total === 0 ? 0 : Math.round((postaram.length / total) * 100);
   const { inicio, fim } = formatWeekRange(isoWeek);
+  const prefixes = Object.keys(appConfig.prefixos);
 
   const fmt = (r: { nomeCanal: string; nivel: string }) =>
-    `- ${displayNameFromChannel(r.nomeCanal)} (${r.nivel})`;
+    `- ${displayNameFromChannel(r.nomeCanal, prefixes)} (${labelDoNivel(r.nivel)})`;
 
   const linhasPostaram = postaram.length
     ? postaram.map(fmt).join("\n")

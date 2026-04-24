@@ -17,7 +17,7 @@ afterEach(() => {
 const canal = {
   canalId: "111222333444555666",
   nomeCanal: "msc-alana-fernandes",
-  nivel: "msc" as const,
+  nivel: "msc",
 };
 
 describe("registrarLembrete", () => {
@@ -73,6 +73,13 @@ describe("registrarCheckin", () => {
     expect(repo.listarStatusSemana("2026-W16")).toHaveLength(1);
     expect(repo.listarStatusSemana("2026-W17")).toHaveLength(1);
   });
+
+  it("accepts custom nivel string", () => {
+    const canalPos = { ...canal, nivel: "pos", nomeCanal: "pos-joao-silva" };
+    repo.registrarLembrete({ ...canalPos, semana: "2026-W17" });
+    const row = repo.listarStatusSemana("2026-W17")[0];
+    expect(row?.nivel).toBe("pos");
+  });
 });
 
 describe("listarStatusSemana", () => {
@@ -127,21 +134,5 @@ describe("listarHistoricoCanal", () => {
     // Should be ordered descending
     expect(historico[0]?.semana).toBe("2026-W05");
     expect(historico[4]?.semana).toBe("2026-W01");
-  });
-});
-
-describe("limparHistoricoAntigo", () => {
-  it("removes old records and returns count", () => {
-    // Insert a check-in with a very old date
-    const oldDate = new Date("2020-01-01T00:00:00.000Z");
-    repo.registrarCheckin({ ...canal, semana: "2020-W01", dataCheckin: oldDate });
-    // Insert a recent check-in
-    repo.registrarCheckin({ ...canal, semana: "2026-W17", dataCheckin: new Date() });
-
-    const removed = repo.limparHistoricoAntigo(6);
-    expect(removed).toBeGreaterThan(0);
-
-    // Recent check-in should still be there
-    expect(repo.listarStatusSemana("2026-W17")).toHaveLength(1);
   });
 });

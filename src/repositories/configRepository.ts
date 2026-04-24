@@ -1,22 +1,30 @@
+import { appConfig } from "../config/appConfig";
 import { config } from "../config";
 
 export interface IConfigRepository {
   getOrientadorId(): string;
   getTimezone(): string;
-  getCategoriaOrientacoes(): string;
+  getCategorias(): string[];
+  getPrefixos(): Record<string, string>;
   getCanalBoasVindas(): string;
   getHorarios(): {
     lembrete: string;
     cobranca: string;
     resumo: string;
-    limpeza: string;
   };
   getLimites(): {
     mensagensPorCiclo: number;
     dmsPorCiclo: number;
     cooldownMs: number;
   };
-  getRetencaoMeses(): number;
+  getEscalacao(): {
+    semanas_para_cobranca_dm: number;
+    semanas_para_alerta: number;
+  };
+  getVisualizacao(): {
+    semanas_historico_padrao: number;
+    meses_resumo_padrao: number;
+  };
 }
 
 export class EnvConfigRepository implements IConfigRepository {
@@ -26,29 +34,26 @@ export class EnvConfigRepository implements IConfigRepository {
   getTimezone(): string {
     return config.timezone;
   }
-  getCategoriaOrientacoes(): string {
-    return config.categoriaOrientacoes;
+  getCategorias(): string[] {
+    return appConfig.categorias;
+  }
+  getPrefixos(): Record<string, string> {
+    return appConfig.prefixos;
   }
   getCanalBoasVindas(): string {
-    return config.canalBoasVindas;
+    return appConfig.canal_boas_vindas;
   }
-  getHorarios(): {
-    lembrete: string;
-    cobranca: string;
-    resumo: string;
-    limpeza: string;
-  } {
-    return config.horarios;
+  getHorarios(): { lembrete: string; cobranca: string; resumo: string } {
+    return appConfig.horarios;
   }
-  getLimites(): {
-    mensagensPorCiclo: number;
-    dmsPorCiclo: number;
-    cooldownMs: number;
-  } {
+  getLimites(): { mensagensPorCiclo: number; dmsPorCiclo: number; cooldownMs: number } {
     return config.limites;
   }
-  getRetencaoMeses(): number {
-    return config.retencao.meses;
+  getEscalacao(): { semanas_para_cobranca_dm: number; semanas_para_alerta: number } {
+    return appConfig.escalacao;
+  }
+  getVisualizacao(): { semanas_historico_padrao: number; meses_resumo_padrao: number } {
+    return appConfig.visualizacao;
   }
 }
 
