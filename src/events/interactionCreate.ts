@@ -1,13 +1,26 @@
 import { Interaction, MessageFlags } from "discord.js";
 import { commands } from "../commands";
+import { onLimparButton } from "../commands/limpar";
 import { config } from "../config";
 import { mensagens } from "../mensagens";
 import { log, maskId } from "../utils/log";
 import { exigirOrientador } from "../utils/permissoes";
 
 export async function onInteractionCreate(interaction: Interaction): Promise<void> {
-  if (!interaction.isChatInputCommand()) return;
   if (interaction.guildId !== config.guildId) return;
+
+  if (interaction.isButton()) {
+    if (interaction.customId.startsWith("limpar:")) {
+      try {
+        await onLimparButton(interaction);
+      } catch (err) {
+        log.error("Falha ao processar botão de /limpar.", err);
+      }
+    }
+    return;
+  }
+
+  if (!interaction.isChatInputCommand()) return;
 
   const cmd = commands.get(interaction.commandName);
   if (!cmd) return;

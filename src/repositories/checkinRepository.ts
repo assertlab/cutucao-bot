@@ -12,6 +12,18 @@ export interface CheckinRow {
   dataCheckin: string | null;
 }
 
+export type CheckinFilter =
+  | { tipo: "tudo" }
+  | { tipo: "canal"; canalId: string }
+  | { tipo: "canais"; nomesCanais: string[] }
+  | { tipo: "nivel"; nivel: string }
+  | { tipo: "periodo"; semanaInicio: string };
+
+export interface ContagemPorNivel {
+  nivel: string;
+  total: number;
+}
+
 export interface ICheckinRepository {
   registrarLembrete(input: {
     canalId: string;
@@ -31,6 +43,13 @@ export interface ICheckinRepository {
   listarHistoricoCanal(
     canalId: string,
   ): Array<{ semana: string; checkinRealizado: 0 | 1 }>;
+  contarRegistros(): number;
+  contarCanaisMonitorados(): number;
+  contarRegistrosPorNivel(): ContagemPorNivel[];
+  registroMaisAntigo(): string | null;
+  registroMaisRecente(): string | null;
+  exportarRegistros(filtro: CheckinFilter): CheckinRow[];
+  limparRegistros(filtro: CheckinFilter): number;
 }
 
 const SCHEMA_SQL = `
@@ -45,6 +64,7 @@ const SCHEMA_SQL = `
   );
   CREATE INDEX IF NOT EXISTS idx_checkins_semana ON checkins(semana);
   CREATE INDEX IF NOT EXISTS idx_checkins_canal ON checkins(canalId);
+  CREATE INDEX IF NOT EXISTS idx_checkins_nivel ON checkins(nivel);
 `;
 
 export class SQLiteCheckinRepository implements ICheckinRepository {
@@ -54,6 +74,18 @@ export class SQLiteCheckinRepository implements ICheckinRepository {
     getRow: Database.Statement;
     canaisDaSemana: Database.Statement;
     historicoCanal: Database.Statement;
+    contarTotal: Database.Statement;
+    contarCanais: Database.Statement;
+    contarPorNivel: Database.Statement;
+    semanaMaisAntiga: Database.Statement;
+    semanaMaisRecente: Database.Statement;
+    listarTudo: Database.Statement;
+    listarPorCanal: Database.Statement;
+    listarPorNivel: Database.Statement;
+    listarPorPeriodo: Database.Statement;
+    limparTudo: Database.Statement;
+    limparPorCanal: Database.Statement;
+    limparPorNivel: Database.Statement;
   };
 
   constructor(private readonly db: Database.Database) {
@@ -92,6 +124,48 @@ export class SQLiteCheckinRepository implements ICheckinRepository {
         ORDER BY semana DESC
         LIMIT 52
       `),
+      contarTotal: db.prepare(`SELECT COUNT(*) AS total FROM checkins`),
+      contarCanais: db.prepare(
+        `SELECT COUNT(DISTINCT canalId) AS total FROM checkins`,
+      ),
+      contarPorNivel: db.prepare(`
+        SELECT nivel, COUNT(*) AS total
+        FROM checkins
+        GROUP BY nivel
+        ORDER BY nivel
+      `),
+      semanaMaisAntiga: db.prepare(
+        `SELECT MIN(semana) AS semana FROM checkins`,
+      ),
+      semanaMaisRecente: db.prepare(
+        `SELECT MAX(semana) AS semana FROM checkins`,
+      ),
+      listarTudo: db.prepare(`
+        SELECT canalId, nomeCanal, nivel, semana, checkinRealizado, dataCheckin
+        FROM checkins
+        ORDER BY semana, nomeCanal
+      `),
+      listarPorCanal: db.prepare(`
+        SELECT canalId, nomeCanal, nivel, semana, checkinRealizado, dataCheckin
+        FROM checkins
+        WHERE canalId = ?
+        ORDER BY semana
+      `),
+      listarPorNivel: db.prepare(`
+        SELECT canalId, nomeCanal, nivel, semana, checkinRealizado, dataCheckin
+        FROM checkins
+        WHERE nivel = ?
+        ORDER BY semana, nomeCanal
+      `),
+      listarPorPeriodo: db.prepare(`
+        SELECT canalId, nomeCanal, nivel, semana, checkinRealizado, dataCheckin
+        FROM checkins
+        WHERE semana >= ?
+        ORDER BY semana, nomeCanal
+      `),
+      limparTudo: db.prepare(`DELETE FROM checkins`),
+      limparPorCanal: db.prepare(`DELETE FROM checkins WHERE canalId = ?`),
+      limparPorNivel: db.prepare(`DELETE FROM checkins WHERE nivel = ?`),
     };
   }
 
@@ -156,5 +230,78 @@ export class SQLiteCheckinRepository implements ICheckinRepository {
       semana: string;
       checkinRealizado: 0 | 1;
     }>;
+  }
+
+  contarRegistros(): number {
+    const row = this.stmts.contarTotal.get() as { total: number };
+    return row.total;
+  }
+
+  contarCanaisMonitorados(): number {
+    const row = this.stmts.contarCanais.get() as { total: number };
+    return row.total;
+  }
+
+  contarRegistrosPorNivel(): ContagemPorNivel[] {
+    return this.stmts.contarPorNivel.all() as ContagemPorNivel[];
+  }
+
+  registroMaisAntigo(): string | null {
+    const row = this.stmts.semanaMaisAntiga.get() as { semana: string | null };
+    return row.semana;
+  }
+
+  registroMaisRecente(): string | null {
+    const row = this.stmts.semanaMaisRecente.get() as { semana: string | null };
+    return row.semana;
+  }
+
+  exportarRegistros(filtro: CheckinFilter): CheckinRow[] {
+    switch (filtro.tipo) {
+      case "tudo":
+        return this.stmts.listarTudo.all() as CheckinRow[];
+      case "canal":
+        return this.stmts.listarPorCanal.all(filtro.canalId) as CheckinRow[];
+      case "canais": {
+        if (filtro.nomesCanais.length === 0) return [];
+        const placeholders = filtro.nomesCanais.map(() => "?").join(",");
+        const stmt = this.db.prepare(`
+          SELECT canalId, nomeCanal, nivel, semana, checkinRealizado, dataCheckin
+          FROM checkins
+          WHERE nomeCanal IN (${placeholders})
+          ORDER BY semana, nomeCanal
+        `);
+        return stmt.all(...filtro.nomesCanais) as CheckinRow[];
+      }
+      case "nivel":
+        return this.stmts.listarPorNivel.all(filtro.nivel) as CheckinRow[];
+      case "periodo":
+        return this.stmts.listarPorPeriodo.all(
+          filtro.semanaInicio,
+        ) as CheckinRow[];
+    }
+  }
+
+  limparRegistros(filtro: CheckinFilter): number {
+    switch (filtro.tipo) {
+      case "tudo":
+        return this.stmts.limparTudo.run().changes;
+      case "canal":
+        return this.stmts.limparPorCanal.run(filtro.canalId).changes;
+      case "canais": {
+        if (filtro.nomesCanais.length === 0) return 0;
+        const placeholders = filtro.nomesCanais.map(() => "?").join(",");
+        const stmt = this.db.prepare(
+          `DELETE FROM checkins WHERE nomeCanal IN (${placeholders})`,
+        );
+        return stmt.run(...filtro.nomesCanais).changes;
+      }
+      case "nivel":
+        return this.stmts.limparPorNivel.run(filtro.nivel).changes;
+      case "periodo":
+        return this.db
+          .prepare(`DELETE FROM checkins WHERE semana >= ?`)
+          .run(filtro.semanaInicio).changes;
+    }
   }
 }

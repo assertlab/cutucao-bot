@@ -28,13 +28,16 @@ O cutuCÃO nasce de uma filosofia simples: **o aluno é dono do próprio progres
 
 **Comandos úteis:**
 
-| Comando           | Descrição                                    | Acesso     |
-| ----------------- | -------------------------------------------- | ---------- |
-| `/template`       | Exibe o template de check-in                 | Todos      |
-| `/ajuda`          | Lista todos os comandos                      | Todos      |
-| `/status`         | Quem postou e quem não postou na semana      | Orientador |
-| `/resumo #canal`  | Histórico de check-ins das últimas 4 semanas | Orientador |
-| `/teste-lembrete` | Dispara manualmente o job de lembrete        | Orientador |
+| Comando           | Descrição                                                          | Acesso     |
+| ----------------- | ------------------------------------------------------------------ | ---------- |
+| `/template`       | Exibe o template de check-in                                       | Todos      |
+| `/ajuda`          | Lista todos os comandos                                            | Todos      |
+| `/status`         | Quem postou e quem não postou na semana                            | Orientador |
+| `/resumo #canal`  | Histórico de check-ins das últimas 4 semanas                       | Orientador |
+| `/uso`            | Estatísticas do banco (registros, tamanho, breakdown por nível)    | Orientador |
+| `/exportar`       | Exporta registros em JSON com filtros (canal, nível, período, tudo) | Orientador |
+| `/limpar`         | Remove registros com confirmação obrigatória e opção de exportar antes | Orientador |
+| `/teste-lembrete` | Dispara manualmente o job de lembrete                              | Orientador |
 
 **Detecção automática** — Canais com prefixo `phd-`, `msc-` ou `bsc-` na categoria "Orientações" são monitorados automaticamente. Criou um canal novo? O cutuCÃO já começa a vigiar.
 
@@ -177,6 +180,7 @@ O cutuCÃO lida com dados de alunos reais e foi projetado com segurança como pr
 - **Circuit breaker** — Jobs que falham repetidamente são desabilitados temporariamente.
 - **Retenção total** — Histórico mantido indefinidamente; sem deleção automática.
 - **Prepared statements** — Todas as queries SQL usam prepared statements.
+- **Gestão de dados protegida** — `/limpar` exige confirmação obrigatória por botão antes de deletar (com opção de exportar antes); `/exportar` entrega o JSON apenas por DM ao orientador. Dados nunca são expostos em canais públicos.
 
 Consulte a [seção 9 da SPEC.md](SPEC.md) para detalhes completos.
 
@@ -226,6 +230,7 @@ Usamos [Conventional Commits](https://www.conventionalcommits.org/):
 
 - [x] **v1.0.0** — Lembretes, cobrança, resumo semanal, boas-vindas, comandos básicos
 - [x] **v1.2.0** — Configuração por arquivo (`config.json`): categorias, prefixos, horários, escalação
+- [x] **v1.3.0** — Gestão de dados: `/uso`, `/exportar` (JSON por DM), `/limpar` (com confirmação por botão)
 - [ ] Comandos `/config` para configuração em tempo real (sem reiniciar o bot)
 - [ ] Dashboard web para visualização de status
 - [ ] Integração com Google Calendar

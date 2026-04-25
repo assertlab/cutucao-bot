@@ -358,7 +358,101 @@ Quando um aluno defende ou sai do grupo:
 
 ---
 
-## 10. Troubleshooting
+## 10. Comandos de gestão de dados (orientador)
+
+A partir da v1.3.0 o cutuCÃO oferece três comandos administrativos para inspecionar, exportar e limpar a base de check-ins. Todos exigem o `ORIENTADOR_ID`, respondem ephemeral (apenas você vê), e nunca executam em servidores diferentes do `GUILD_ID`.
+
+### 10.1. `/uso`
+
+Mostra estatísticas atuais do banco:
+
+- Total de check-ins registrados.
+- Quantos canais distintos já apareceram nos registros (não necessariamente os atualmente monitorados — inclui canais antigos que ainda têm linhas no histórico).
+- Datas (DD/MM/YYYY) do registro mais antigo e mais recente, calculadas a partir da segunda-feira da semana ISO.
+- Tamanho do arquivo SQLite em KB ou MB.
+- Breakdown por nível usando os labels configurados em `config.json` (ex: "Doutorado: 234 registros, Mestrado: 1.200 registros, Graduação: 413 registros").
+
+Use para ter uma noção rápida de volume antes de exportar ou limpar.
+
+### 10.2. `/exportar`
+
+Exporta registros em JSON. O arquivo é entregue **por DM ao orientador** (não no canal, para não expor dados); a resposta no canal é apenas confirmação ephemeral.
+
+**Parâmetros:**
+
+| Parâmetro | Tipo | Quando usar |
+| --------- | ---- | ----------- |
+| `escopo` | choice obrigatório (`tudo`, `canal`, `nivel`, `periodo`) | Sempre |
+| `canal` | canal de texto | quando `escopo=canal` |
+| `nivel` | choice (derivado de `prefixos` do `config.json`) | quando `escopo=nivel` |
+| `meses` | inteiro 1–240, default 6 | quando `escopo=periodo` |
+
+**Estrutura do JSON exportado:**
+
+```json
+{
+  "exportacao": {
+    "data": "2026-04-25T18:00:00.000Z",
+    "versao": "1.3.0",
+    "servidor": "ASSERT Lab (CIn-UFPE)",
+    "filtro": "canal: msc-alana-fernandes (Alana Fernandes)"
+  },
+  "registros": [
+    {
+      "canal": "msc-alana-fernandes",
+      "nivel": "msc",
+      "label": "Mestrado",
+      "semana": "2026-W17",
+      "checkin_realizado": true,
+      "data_checkin": "2026-04-21T10:30:00.000Z",
+      "semanas_consecutivas_sem_checkin": 0
+    }
+  ],
+  "resumo": {
+    "total_registros": 48,
+    "total_checkins_realizados": 35,
+    "taxa_adesao": "72.9%"
+  }
+}
+```
+
+**Limites:**
+
+- Discord limita anexos em DM a 25 MB. Se a exportação ultrapassar esse limite, o bot recusa e sugere fatiar por canal, nível ou um período menor.
+- Se você bloquear DMs do bot, a exportação falha com aviso (habilite "Mensagens diretas de membros do servidor").
+
+### 10.3. `/limpar`
+
+Remove registros do banco. **Esta operação é irreversível.** Por isso, o `/limpar` sempre exige pelo menos uma interação por botão antes de executar a deleção.
+
+**Parâmetros:**
+
+| Parâmetro | Tipo | Quando usar |
+| --------- | ---- | ----------- |
+| `escopo` | choice obrigatório (`tudo`, `canal`, `canais`, `nivel`) | Sempre |
+| `canal` | canal de texto | quando `escopo=canal` |
+| `nivel` | choice (derivado dos `prefixos`) | quando `escopo=nivel` |
+| `lista` | string com nomes separados por vírgula (`phd-jack, msc-natasha`) | quando `escopo=canais` |
+
+**Fluxo de confirmação:**
+
+1. O bot calcula quantos registros casariam com o filtro e exibe um aviso ephemeral com o total impactado e três botões:
+   - **Exportar antes e limpar** (azul) — gera o JSON, envia por DM e, se a exportação for bem-sucedida, deleta. Se a exportação falhar (DM bloqueada, arquivo grande), a limpeza é abortada para preservar o histórico.
+   - **Limpar sem exportar** (vermelho) — exibe uma confirmação final com botões **Confirmar limpeza** (vermelho) e **Cancelar** (cinza).
+   - **Cancelar** (cinza) — descarta o pedido sem deletar.
+2. Se você não interagir com os botões em até 5 minutos, o pedido expira e nada é deletado.
+3. Botões clicados por usuários diferentes do `ORIENTADOR_ID` são rejeitados.
+
+O estado do pedido pendente é mantido em memória — se o bot reiniciar entre o slash command e o clique no botão, o pedido é perdido (e nada é deletado, comportamento seguro).
+
+**Boas práticas:**
+
+- Sempre prefira **Exportar antes e limpar** se houver chance de querer os dados depois.
+- Para alunos que defenderam: deletar o canal no Discord não remove os registros do banco. Use `/limpar escopo:canal canal:#...` para liberar espaço, ou `/limpar escopo:canais lista:msc-aluno1,bsc-aluno2` em lote.
+
+---
+
+## 11. Troubleshooting
 
 ### O bot não encontra os canais
 

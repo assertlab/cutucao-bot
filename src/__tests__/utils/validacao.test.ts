@@ -5,6 +5,7 @@ import {
   isValidCron,
   isValidDiscordId,
   nivelFromChannelName,
+  parseListaNomesCanais,
   sanitizeDisplayName,
 } from "../../utils/validacao";
 
@@ -150,5 +151,41 @@ describe("displayNameFromChannel — prefixos customizados", () => {
   });
   it("uses default prefixes when none passed", () => {
     expect(displayNameFromChannel("phd-maria")).toBe("Maria");
+  });
+});
+
+describe("parseListaNomesCanais", () => {
+  it("returns empty array for empty input", () => {
+    expect(parseListaNomesCanais("")).toEqual([]);
+    expect(parseListaNomesCanais("   ")).toEqual([]);
+  });
+
+  it("splits a comma-separated list and trims whitespace", () => {
+    expect(parseListaNomesCanais("phd-jack, msc-natasha,bsc-harry")).toEqual([
+      "phd-jack",
+      "msc-natasha",
+      "bsc-harry",
+    ]);
+  });
+
+  it("strips a leading hash from each entry", () => {
+    expect(parseListaNomesCanais("#phd-jack, #msc-natasha")).toEqual([
+      "phd-jack",
+      "msc-natasha",
+    ]);
+  });
+
+  it("filters out entries with invalid characters", () => {
+    expect(parseListaNomesCanais("phd-jack, BAD NAME, msc-natasha")).toEqual([
+      "phd-jack",
+      "msc-natasha",
+    ]);
+  });
+
+  it("filters out entries with markdown injection attempts", () => {
+    expect(parseListaNomesCanais("phd-jack, *evil*, msc-x")).toEqual([
+      "phd-jack",
+      "msc-x",
+    ]);
   });
 });
