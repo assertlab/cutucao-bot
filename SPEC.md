@@ -111,10 +111,43 @@ Dúvidas? É só perguntar no #café!
 | `/template`          | Exibe o template de check-in para copiar e colar              | Todos          |
 | `/status`            | Mostra o status de check-in da semana (quem postou, quem não) | Orientador     |
 | `/resumo @aluno`     | Mostra o histórico de check-ins do aluno (últimas 4 semanas)  | Orientador     |
+| `/uso`               | Estatísticas do banco (registros, canais, tamanho, breakdown por nível) | Orientador |
+| `/exportar`          | Exporta registros em JSON (DM, filtros: canal/nível/período/tudo)       | Orientador |
+| `/limpar`            | Remove registros do banco com confirmação obrigatória por botão        | Orientador |
 | `/config canais`     | Lista os canais monitorados e permite adicionar/remover       | Orientador     |
 | `/config orientador` | Define quem recebe os resumos semanais (por ID do Discord)    | Orientador     |
 | `/config horarios`   | Ajusta horários de lembrete, cobrança e resumo                | Orientador     |
 | `/ajuda`             | Exibe lista de comandos disponíveis                           | Todos          |
+
+### 2.4.1. Comandos de gestão de dados (orientador)
+
+Três comandos administrativos lidam diretamente com a base de check-ins. Todos exigem `ORIENTADOR_ID`, respondem ephemeral, e nunca são executados em servidores que não o `GUILD_ID` configurado.
+
+**`/uso`** — Estatísticas do banco. Resposta inclui total de registros, número de canais distintos monitorados, semana mais antiga e mais recente (formatadas como DD/MM/YYYY a partir da segunda-feira da semana ISO), tamanho do arquivo SQLite em KB/MB, e breakdown por nível usando os labels configurados em `config.json` (ex: "Doutorado: X registros, Mestrado: Y registros").
+
+**`/exportar`** — Exporta registros como JSON. Parâmetros:
+
+- `escopo` (obrigatório, choice): `tudo`, `canal`, `nivel`, `periodo`.
+- `canal` (channel) — quando `escopo=canal`.
+- `nivel` (string choice, derivado de `appConfig.prefixos`) — quando `escopo=nivel`.
+- `meses` (integer, default 6, 1–240) — quando `escopo=periodo`.
+
+O JSON contém metadados (`exportacao.data` ISO 8601, `versao`, `servidor`, `filtro`), `registros[]` (canal, nível, label, semana, `checkin_realizado` boolean, `data_checkin` ISO ou null, `semanas_consecutivas_sem_checkin`), e `resumo` (totais e taxa de adesão). O arquivo é enviado por DM ao orientador como attachment; a resposta no canal é apenas confirmação ephemeral. Acima de 25 MB, o bot recusa o envio e sugere fatiar por canal/período.
+
+**`/limpar`** — Remove registros. Parâmetros:
+
+- `escopo` (obrigatório, choice): `tudo`, `canal`, `canais`, `nivel`.
+- `canal` (channel), `nivel` (string choice), `lista` (string com nomes separados por vírgula) conforme o escopo.
+
+Fluxo de confirmação obrigatório (a deleção NUNCA executa sem pelo menos uma interação por botão):
+
+1. Resposta inicial ephemeral com o total impactado e três botões: **Exportar antes e limpar**, **Limpar sem exportar**, **Cancelar**.
+2. **Exportar antes e limpar** → executa a exportação por DM e, se bem-sucedida, deleta. Se a exportação falhar (DM bloqueada, arquivo grande), a limpeza é abortada.
+3. **Limpar sem exportar** → exibe confirmação final com botões **Confirmar limpeza** e **Cancelar**.
+4. **Confirmar limpeza** → executa a deleção e responde com o total removido.
+5. **Cancelar** ou expiração (TTL de 5 minutos) → descarta o pendente sem deletar.
+
+O estado da intenção de limpeza fica em memória (Map indexado pelo `interaction.id` do slash command), não no banco. Botões clicados por usuários diferentes do `ORIENTADOR_ID` são rejeitados.
 
 ### 2.5. Detecção automática de canais
 
@@ -683,6 +716,14 @@ Antes de colocar o cutuCÃO em produção, verificar todos os itens:
 - [x] M4: Testes automatizados com Vitest (unitários + integração)
 - [ ] M5: CI/CD com GitHub Actions (typecheck, testes, audit)
 - [ ] M6: Logs estruturados + alertas por DM em falhas de jobs
+
+### Fase 5.5 — Gestão de dados (orientador)
+
+- [x] Comando `/uso` — estatísticas do banco (registros, canais, tamanho, breakdown por nível)
+- [x] Comando `/exportar` — exportação em JSON com filtros (canal/nível/período/tudo) entregue por DM
+- [x] Comando `/limpar` — remoção de registros com confirmação obrigatória por botão (com opção de exportar antes)
+- [x] Repositório expandido: `contarRegistros`, `contarRegistrosPorNivel`, `registroMaisAntigo`, `registroMaisRecente`, `exportarRegistros`, `limparRegistros` (todos via prepared statements)
+- [x] Testes para os novos métodos do repositório, helpers de exportação, e fluxo de confirmação do `/limpar`
 
 ### config.json — estrutura e campos
 

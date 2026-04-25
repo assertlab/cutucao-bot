@@ -42,7 +42,7 @@
   "cmd_ajuda": {
     "categoria": "comando",
     "descricao": "Conteúdo do comando /ajuda — lista todos os comandos disponíveis",
-    "texto": "🐕 **Comandos do cutuCÃO**\n\n**Para todos:**\n`/template` — Exibe o template de check-in para copiar e colar\n`/ajuda` — Exibe esta lista de comandos\n\n**Só pro orientador:**\n`/status` — Mostra quem postou e quem não postou o check-in esta semana\n`/resumo #canal` — Histórico de check-ins de um canal nas últimas 4 semanas\n`/teste-lembrete` — Dispara manualmente o job de lembrete de check-in\n`/teste-boas-vindas` — Simula a mensagem de boas-vindas no canal de entrada"
+    "texto": "🐕 **Comandos do cutuCÃO**\n\n**Para todos:**\n`/template` — Exibe o template de check-in para copiar e colar\n`/ajuda` — Exibe esta lista de comandos\n\n**Só pro orientador:**\n`/status` — Mostra quem postou e quem não postou o check-in esta semana\n`/resumo #canal` — Histórico de check-ins de um canal (últimas semanas configuráveis)\n`/uso` — Estatísticas de uso do banco de dados\n`/exportar escopo` — Exporta check-ins em JSON por DM. Escopos: tudo, canal, nivel, periodo\n`/limpar escopo` — Remove registros com confirmação. Escopos: tudo, canal, canais, nivel\n`/teste-lembrete` — Dispara manualmente o job de lembrete de check-in\n`/teste-boas-vindas` — Simula a mensagem de boas-vindas no canal de entrada"
   },
   "cmd_status_sem_dados": {
     "categoria": "comando",
@@ -108,5 +108,80 @@
     "categoria": "erro",
     "descricao": "Resposta de erro do /teste-boas-vindas quando o envio falha",
     "texto": "🐕 Algo deu errado ao enviar a mensagem. Verifique se o bot tem permissão de envio no canal."
+  },
+  "cmd_uso_conteudo": {
+    "categoria": "comando",
+    "descricao": "Resposta do /uso com estatísticas do banco de dados",
+    "texto": "🐕 **Uso do banco de dados**\n\n📊 **Registros:** {{total_registros}} check-ins\n📁 **Canais monitorados:** {{total_canais}}\n📅 **Registro mais antigo:** {{mais_antigo}}\n📅 **Registro mais recente:** {{mais_recente}}\n💾 **Tamanho do banco:** {{tamanho}}\n\n**Por nível:**\n{{linhas_nivel}}"
+  },
+  "cmd_uso_sem_dados": {
+    "categoria": "comando",
+    "descricao": "Resposta do /uso quando não há registros no banco",
+    "texto": "🐕 **Uso do banco de dados**\n\nAinda não há registros de check-in.\n💾 **Tamanho do banco:** {{tamanho}}"
+  },
+  "cmd_exportar_sem_registros": {
+    "categoria": "comando",
+    "descricao": "Resposta do /exportar quando o filtro retorna zero registros",
+    "texto": "🐕 Nenhum registro encontrado para o filtro **{{filtro}}**. Nada a exportar."
+  },
+  "cmd_exportar_arquivo_grande": {
+    "categoria": "erro",
+    "descricao": "Resposta do /exportar quando o arquivo excede o limite de DM do Discord (25MB)",
+    "texto": "🐕 O arquivo gerado tem {{tamanho}}, acima do limite de 25MB para DM. Tente exportar por canal, nível ou um período menor (ex: últimos 3 meses)."
+  },
+  "cmd_exportar_dm_falhou": {
+    "categoria": "erro",
+    "descricao": "Resposta quando o bot não consegue enviar DM para o orientador (DMs bloqueadas)",
+    "texto": "🐕 Não consegui te enviar o arquivo por DM. Habilite mensagens diretas de membros do servidor e tente novamente."
+  },
+  "cmd_exportar_sucesso": {
+    "categoria": "comando",
+    "descricao": "Confirmação ephemeral no canal de que a exportação foi enviada por DM",
+    "texto": "🐕 Exportação enviada por DM ({{registros}} registro(s), {{tamanho}}).\nFiltro: **{{filtro}}**."
+  },
+  "cmd_exportar_dm_corpo": {
+    "categoria": "comando",
+    "descricao": "Mensagem que acompanha o arquivo JSON enviado por DM ao orientador",
+    "texto": "🐕 **Exportação de check-ins do cutuCÃO**\nFiltro: {{filtro}}\nRegistros: {{registros}}\nTaxa de adesão: {{taxa}}\n\nArquivo JSON em anexo."
+  },
+  "cmd_limpar_filtro_invalido": {
+    "categoria": "erro",
+    "descricao": "Resposta quando o /limpar é chamado sem o parâmetro obrigatório do escopo",
+    "texto": "🐕 Parâmetro inválido para o escopo **{{escopo}}**. Veja `/ajuda` para a sintaxe correta."
+  },
+  "cmd_limpar_sem_registros": {
+    "categoria": "comando",
+    "descricao": "Resposta do /limpar quando o filtro não corresponde a nenhum registro",
+    "texto": "🐕 Nenhum registro encontrado para o filtro **{{filtro}}**. Nada a limpar."
+  },
+  "cmd_limpar_aviso": {
+    "categoria": "comando",
+    "descricao": "Aviso inicial do /limpar com botões de exportar antes ou limpar sem exportar",
+    "texto": "🐕 **Atenção!** Serão removidos **{{total}}** registro(s) do filtro **{{filtro}}**.\nEsta ação é **irreversível**.\n\nO que deseja fazer?"
+  },
+  "cmd_limpar_confirmacao_final": {
+    "categoria": "comando",
+    "descricao": "Confirmação final antes de limpar sem exportar",
+    "texto": "🐕 Tem certeza? Vou remover **{{total}}** registro(s) do filtro **{{filtro}}** sem backup. Esta ação não pode ser desfeita."
+  },
+  "cmd_limpar_sucesso": {
+    "categoria": "comando",
+    "descricao": "Confirmação após a limpeza concluída",
+    "texto": "🐕 **{{total}}** registro(s) removidos do filtro **{{filtro}}**."
+  },
+  "cmd_limpar_cancelado": {
+    "categoria": "comando",
+    "descricao": "Resposta quando o orientador cancela ou não confirma a tempo",
+    "texto": "🐕 Limpeza cancelada. Nenhum registro foi removido."
+  },
+  "cmd_limpar_expirado": {
+    "categoria": "comando",
+    "descricao": "Resposta quando a confirmação do /limpar expira",
+    "texto": "🐕 Tempo esgotado para confirmar a limpeza. Execute `/limpar` novamente se ainda quiser prosseguir."
+  },
+  "cmd_botao_nao_autorizado": {
+    "categoria": "erro",
+    "descricao": "Resposta quando alguém que não é o orientador tenta usar um botão de confirmação",
+    "texto": "🐕 Esses botões são só pro orientador!"
   }
 }

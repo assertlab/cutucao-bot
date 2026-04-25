@@ -31,6 +31,14 @@ export function sanitizeDisplayName(name: string): string {
   return name.replace(/[*_~`|>@#\\]/g, "").slice(0, 80);
 }
 
+export function parseListaNomesCanais(lista: string): string[] {
+  return lista
+    .split(",")
+    .map((s) => s.trim())
+    .map((s) => s.replace(/^#/, ""))
+    .filter((s) => s.length > 0 && /^[a-z0-9-]+$/.test(s));
+}
+
 export function displayNameFromChannel(
   channelName: string,
   prefixes: string[] = ["phd", "msc", "bsc"],
