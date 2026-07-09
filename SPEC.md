@@ -1,6 +1,6 @@
 # cutuCÃO 🐕 — Especificação Técnica
 
-**Projeto:** cutuCÃO — Bot Discord do ASSERT Lab (CIn-UFPE) **Mascote:** Vira-lata caramelo com megafone **Objetivo:** Automatizar o acompanhamento de orientandos, substituindo o Carl-bot por uma solução própria com controle total. **Stack:** TypeScript + discord.js **Hospedagem:** Nuvem (gratuito ou baixo custo) **Repositório:** `cutucao-bot`
+**Projeto:** cutuCÃO — Bot Discord do ASSERT Lab (CIn-UFPE) **Mascote:** Vira-lata caramelo com megafone **Objetivo:** Automatizar o acompanhamento de orientandos, substituindo o Carl-bot por uma solução própria com controle total. **Stack:** TypeScript + discord.js **Hospedagem:** Oracle Cloud Free Tier (VPS com Node.js + systemd) **Repositório:** `cutucao-bot`
 
 ---
 
@@ -106,18 +106,29 @@ Dúvidas? É só perguntar no #café!
 
 ### 2.4. Comandos utilitários
 
+**Implementados:**
+
+| Comando             | Descrição                                                     | Quem pode usar |
+| ------------------- | ------------------------------------------------------------- | -------------- |
+| `/template`         | Exibe o template de check-in para copiar e colar              | Todos          |
+| `/ajuda`            | Exibe lista de comandos disponíveis                           | Todos          |
+| `/status`           | Mostra o status de check-in da semana (quem postou, quem não) | Orientador     |
+| `/resumo #canal`    | Mostra o histórico de check-ins do canal (semanas configuráveis) | Orientador  |
+| `/uso`              | Estatísticas do banco (registros, canais, tamanho, breakdown por nível) | Orientador |
+| `/exportar`         | Exporta registros em JSON (DM, filtros: canal/nível/período/tudo)       | Orientador |
+| `/limpar`           | Remove registros do banco com confirmação obrigatória por botão         | Orientador |
+| `/teste-lembrete`   | Dispara manualmente o job de lembrete de check-in             | Orientador     |
+| `/teste-boas-vindas`| Simula a mensagem de boas-vindas no canal de entrada          | Orientador     |
+
+**Planejados (roadmap, ainda não implementados):**
+
 | Comando              | Descrição                                                     | Quem pode usar |
 | -------------------- | ------------------------------------------------------------- | -------------- |
-| `/template`          | Exibe o template de check-in para copiar e colar              | Todos          |
-| `/status`            | Mostra o status de check-in da semana (quem postou, quem não) | Orientador     |
-| `/resumo @aluno`     | Mostra o histórico de check-ins do aluno (últimas 4 semanas)  | Orientador     |
-| `/uso`               | Estatísticas do banco (registros, canais, tamanho, breakdown por nível) | Orientador |
-| `/exportar`          | Exporta registros em JSON (DM, filtros: canal/nível/período/tudo)       | Orientador |
-| `/limpar`            | Remove registros do banco com confirmação obrigatória por botão        | Orientador |
 | `/config canais`     | Lista os canais monitorados e permite adicionar/remover       | Orientador     |
 | `/config orientador` | Define quem recebe os resumos semanais (por ID do Discord)    | Orientador     |
 | `/config horarios`   | Ajusta horários de lembrete, cobrança e resumo                | Orientador     |
-| `/ajuda`             | Exibe lista de comandos disponíveis                           | Todos          |
+
+Até que os comandos `/config` existam, categorias, prefixos, canal de boas-vindas e horários são ajustados via `config.json` (seção 10), com reinício do bot.
 
 ### 2.4.1. Comandos de gestão de dados (orientador)
 
@@ -209,24 +220,29 @@ cutucao-bot/
 │   ├── database.ts              # Setup e queries SQLite
 │   ├── commands/
 │   │   ├── template.ts          # /template
+│   │   ├── ajuda.ts             # /ajuda
 │   │   ├── status.ts            # /status
-│   │   ├── resumo.ts            # /resumo @aluno
-│   │   ├── config.ts            # /config (subcomandos)
-│   │   └── ajuda.ts             # /ajuda
+│   │   ├── resumo.ts            # /resumo #canal
+│   │   ├── uso.ts               # /uso
+│   │   ├── exportar.ts          # /exportar
+│   │   ├── limpar.ts            # /limpar (+ limparState.ts)
+│   │   ├── testeLembrete.ts     # /teste-lembrete
+│   │   └── testeBoasVindas.ts   # /teste-boas-vindas
 │   ├── events/
 │   │   ├── ready.ts             # Inicialização, registro de comandos
 │   │   ├── guildMemberAdd.ts    # Boas-vindas
 │   │   ├── messageCreate.ts     # Detecta check-ins nos canais monitorados
-│   │   └── channelCreate.ts     # Detecta novos canais na categoria Orientações
+│   │   ├── channelCreate.ts     # Detecta novos canais na categoria Orientações
+│   │   └── interactionCreate.ts # Roteia slash commands e botões
 │   ├── jobs/
 │   │   ├── scheduler.ts         # Setup do node-cron
 │   │   ├── lembrete.ts          # Job de segunda 09:00
 │   │   ├── cobranca.ts          # Job de quarta 09:00
 │   │   └── resumo.ts            # Job de sexta 18:00
-│   └── utils/
-│       ├── canais.ts            # Helpers para identificar canais de orientação
-│       ├── formatters.ts        # Formatação de mensagens
-│       └── semana.ts            # Cálculo de semana ISO, datas
+│   ├── repositories/            # Padrão Repository (checkins e configuração)
+│   ├── mensagens/               # Templates de mensagens externalizados (templates.json)
+│   ├── config/                  # Carregamento e validação do config.json
+│   └── utils/                   # Helpers (canais, formatação, semana ISO, validação, log)
 ├── package.json
 ├── tsconfig.json
 ├── .env                         # DISCORD_TOKEN, GUILD_ID, ORIENTADOR_ID
@@ -328,31 +344,23 @@ TZ=America/Recife
 
 ## 7. Hospedagem
 
-### Opção recomendada: Railway (https://railway.app)
+### Opção recomendada: Oracle Cloud Free Tier
 
-- **Plano gratuito:** $5/mês de crédito gratuito (mais que suficiente para um bot leve).
-- Deploy direto do GitHub.
-- Suporte nativo a Node.js/TypeScript.
-- Persistent disk para o SQLite.
-- Boa confiabilidade e uptime.
+- **Custo:** gratuito permanente (não é trial). Uma VM AMD Micro (1 OCPU, 1 GB RAM) é suficiente; o bot consome menos de 30 MB.
+- VM completa com controle total, processo gerenciado por systemd (reinício automático após crash ou reboot).
+- Sem limites de tempo e sem suspensão por inatividade.
+- Persistência do SQLite em disco local da instância.
+
+O guia completo de deploy (criação da instância, Node.js, systemd, script de atualização) está em [docs/deploy-oracle-cloud.md](docs/deploy-oracle-cloud.md).
 
 ### Alternativas
 
-| Plataforma                 | Custo                     | Observações                                                                                   |
+| Plataforma                 | Custo                     | Observações                                                                                    |
 | -------------------------- | ------------------------- | --------------------------------------------------------------------------------------------- |
-| **Render** (render.com)    | Gratuito (com limitações) | Plano free pode suspender após inatividade — ruim para bots que precisam estar sempre online. |
-| **Fly.io**                 | Gratuito (com limites)    | Bom para bots leves. Requer um pouco mais de configuração.                                    |
-| **Oracle Cloud Free Tier** | Gratuito permanente       | VM completa gratuita. Mais trabalho de setup, mas sem limites de tempo.                       |
-| **VPS própria**            | ~$5/mês                   | DigitalOcean, Hetzner. Controle total.                                                        |
-
-### Setup no Railway
-
-```bash
-# 1. Criar repositório no GitHub com o código do bot
-# 2. Conectar o repositório ao Railway
-# 3. Configurar variáveis de ambiente no dashboard do Railway
-# 4. Deploy automático a cada push
-```
+| **Fly.io**                 | Gratuito (com limites)    | Bom para bots leves; requer um pouco mais de configuração.                                     |
+| **VPS própria**            | ~$5/mês                   | DigitalOcean, Hetzner; controle total, mesma abordagem de Node.js + systemd.                   |
+| **Railway** (railway.app)  | $5/mês de crédito         | Alternativa histórica: foi a hospedagem original do projeto (deploy direto do GitHub, persistent disk). Migrado para Oracle Cloud. |
+| **Render** (render.com)    | Gratuito (com limitações) | Plano free pode suspender após inatividade; ruim para bots que precisam estar sempre online.   |
 
 ---
 
@@ -398,7 +406,7 @@ Esta seção define os requisitos de segurança do cutuCÃO. O bot opera em um s
 **Token do bot:**
 
 - NUNCA commitado no repositório. O `.gitignore` deve incluir `.env`, `*.db`, `data/`, e qualquer arquivo de configuração local.
-- Armazenado exclusivamente via variáveis de ambiente da plataforma de hospedagem (Railway, Fly.io, etc.).
+- Armazenado exclusivamente via variáveis de ambiente da plataforma de hospedagem (no Oracle Cloud, via arquivo `.env` lido pelo systemd; em PaaS como Fly.io, via dashboard).
 - Rotação do token a cada 6 meses ou imediatamente em caso de suspeita de comprometimento (via Discord Developer Portal → Bot → Reset Token).
 - Se o repositório for público, habilitar o GitHub Secret Scanning para detecção automática de tokens expostos.
 
@@ -416,7 +424,7 @@ dist/
 **Variáveis de ambiente no CI/CD:**
 
 - Nunca usar variáveis de ambiente em arquivos de configuração do repositório (ex: `docker-compose.yml` com valores hardcoded).
-- No Railway/Fly.io, configurar via dashboard — nunca via CLI em logs compartilhados.
+- No Oracle Cloud, manter o `.env` com permissões restritas na VM (fora do Git); em PaaS, configurar via dashboard, nunca via CLI em logs compartilhados.
 
 ### 9.3. Princípio do menor privilégio
 
@@ -457,7 +465,7 @@ O bot deve recusar operar em qualquer servidor que não seja o GUILD_ID configur
 
 **Toda entrada do usuário é potencialmente maliciosa.** Isso inclui:
 
-- Parâmetros de slash commands (`/config horarios`, `/resumo @aluno`)
+- Parâmetros de slash commands (`/config horarios`, `/resumo #canal`)
 - Nomes de canais (usados para extrair nível phd/msc/bsc)
 - Nomes de usuário (usados em mensagens de boas-vindas)
 
@@ -557,7 +565,7 @@ db.exec(`SELECT * FROM checkins WHERE canalId = '${canalId}'`);
 
 **Backup:**
 
-- Configurar backup automático semanal do arquivo `.db` (no Railway, usar o persistent disk).
+- Configurar backup automático semanal do arquivo `.db` (no Oracle Cloud, um cron na VM copiando `data/cutucao.db` para outro diretório ou bucket).
 - Se usar Turso, os backups são automáticos.
 - O arquivo de banco NUNCA deve estar no repositório Git.
 
@@ -624,7 +632,7 @@ async function enviarComRateLimit(
 
 ### 9.11. Segurança na hospedagem
 
-**Railway / Fly.io / qualquer PaaS:**
+**Oracle Cloud / Fly.io / qualquer VPS ou PaaS:**
 
 - Habilitar 2FA (autenticação de dois fatores) na conta da plataforma de hospedagem.
 - Habilitar 2FA na conta do Discord Developer Portal.
@@ -679,7 +687,7 @@ Antes de colocar o cutuCÃO em produção, verificar todos os itens:
 - [x] Resumo semanal para o orientador (sexta 18:00) com ephemeral DM
 - [x] Controle de acesso a comandos (seção 9.5)
 - [x] Sanitização de entrada em todos os inputs (seção 9.4)
-- [ ] Deploy no Railway com 2FA habilitado
+- [x] Deploy no Oracle Cloud Free Tier (systemd) com 2FA habilitado
 - [ ] Executar checklist de segurança (seção 9.13)
 
 ### Fase 2 — Complementos

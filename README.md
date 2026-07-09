@@ -38,21 +38,22 @@ O cutuCÃO nasce de uma filosofia simples: **o aluno é dono do próprio progres
 | `/exportar`       | Exporta registros em JSON com filtros (canal, nível, período, tudo) | Orientador |
 | `/limpar`         | Remove registros com confirmação obrigatória e opção de exportar antes | Orientador |
 | `/teste-lembrete` | Dispara manualmente o job de lembrete                              | Orientador |
+| `/teste-boas-vindas` | Simula a mensagem de boas-vindas no canal de entrada            | Orientador |
 
 **Detecção automática** — Canais com prefixo `phd-`, `msc-` ou `bsc-` na categoria "Orientações" são monitorados automaticamente. Criou um canal novo? O cutuCÃO já começa a vigiar.
 
 ## Stack
 
-- **Runtime:** Node.js 18+
+- **Runtime:** Node.js 20+
 - **Linguagem:** TypeScript
 - **Framework:** discord.js v14
 - **Banco de dados:** SQLite (via better-sqlite3)
 - **Agendamento:** node-cron
-- **Hospedagem:** Railway
+- **Hospedagem:** Oracle Cloud Free Tier (VPS com Node.js + systemd)
 
 ## Pré-requisitos
 
-- [Node.js](https://nodejs.org/) 18 ou superior
+- [Node.js](https://nodejs.org/) 20 ou superior
 - [Git](https://git-scm.com/)
 - Uma aplicação de bot criada no [Discord Developer Portal](https://discord.com/developers/applications)
 
@@ -186,14 +187,18 @@ Consulte a [seção 9 da SPEC.md](SPEC.md) para detalhes completos.
 
 ## Deploy
 
-O cutuCÃO roda em produção no [Railway](https://railway.app):
+O cutuCÃO roda em produção em uma VM gratuita do Oracle Cloud Free Tier, com o processo gerenciado por systemd. Consulte [docs/deploy-oracle-cloud.md](docs/deploy-oracle-cloud.md) para o guia completo de deploy no Oracle Cloud Free Tier, incluindo criação da instância, instalação do Node.js, serviço systemd e script de atualização.
 
-1. Conecte o repositório GitHub ao Railway
-2. Configure as variáveis de ambiente no dashboard (nunca no código)
-3. Adicione um volume montado em `/app/data` para persistência do SQLite
-4. O deploy acontece automaticamente a cada push na `main`
+Outras opções de hospedagem: Fly.io ou qualquer VPS com Node.js. Em qualquer plataforma, configure as variáveis de ambiente fora do código e garanta persistência do arquivo SQLite em disco.
 
-Outras opções de hospedagem: Fly.io, Oracle Cloud Free Tier, ou qualquer VPS com Node.js.
+## Documentação
+
+Além deste README e da [SPEC.md](SPEC.md) (especificação técnica completa), a pasta `docs/` reúne:
+
+- [docs/guia-operacional.md](docs/guia-operacional.md): premissas do servidor, convenções de nomenclatura, configuração via `config.json`, variáveis de ambiente, comandos de gestão de dados e troubleshooting.
+- [docs/deploy-oracle-cloud.md](docs/deploy-oracle-cloud.md): guia de deploy no Oracle Cloud Free Tier, do zero, com instância gratuita permanente e serviço systemd.
+- [docs/migracao-railway-oracle.md](docs/migracao-railway-oracle.md): registro da migração da hospedagem do Railway para o Oracle Cloud (referência histórica).
+- [docs/melhorias-es.md](docs/melhorias-es.md): proposta de melhorias de engenharia de software (Fases 5 e 6), com o estado de cada item.
 
 ## Contribuindo
 
@@ -229,6 +234,7 @@ Usamos [Conventional Commits](https://www.conventionalcommits.org/):
 ## Roadmap
 
 - [x] **v1.0.0** — Lembretes, cobrança, resumo semanal, boas-vindas, comandos básicos
+- [x] **v1.1.0**: Engenharia de software: mensagens externalizadas em JSON, padrão Repository, testes automatizados (Vitest)
 - [x] **v1.2.0** — Configuração por arquivo (`config.json`): categorias, prefixos, horários, escalação
 - [x] **v1.3.0** — Gestão de dados: `/uso`, `/exportar` (JSON por DM), `/limpar` (com confirmação por botão)
 - [ ] Comandos `/config` para configuração em tempo real (sem reiniciar o bot)
@@ -248,7 +254,7 @@ O cutuCÃO foi criado para o ASSERT Lab, mas pode ser adaptado para qualquer gru
 5. Copie `config.example.json` para `config.json` e ajuste categorias, prefixos, horários e demais configurações
 6. Faça deploy
 
-O bot detecta canais automaticamente — sem alterar código. Consulte o `config.example.json` para todas as opções de customização.
+O bot detecta canais automaticamente, sem alterar código. Consulte o `config.example.json` para todas as opções de customização. Para o deploy, o [guia do Oracle Cloud](docs/deploy-oracle-cloud.md) cobre a instalação completa do zero em uma VM gratuita no Oracle Cloud Free Tier.
 
 ## Licença
 
