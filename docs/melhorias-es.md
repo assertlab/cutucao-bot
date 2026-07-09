@@ -1,14 +1,16 @@
 # cutuCÃO — Proposta de Melhorias de Engenharia de Software
 
-## Diagnóstico do estado atual
+> **Estado atual (v1.3.0):** M1 (externalização de mensagens), M2 (padrão Repository) e M4 (testes com Vitest) já foram implementados. M3, M5 e M6 seguem pendentes; a Fase 6 (dashboard) permanece futura. O documento é mantido como registro das decisões e do que falta.
 
-O MVP foi entregue rápido e funciona bem, mas tem débitos técnicos esperados para essa fase:
+## Diagnóstico do estado inicial
 
-1. **Mensagens hardcoded** — Textos espalhados em `formatters.ts` e nos comandos. Qualquer edição exige mexer no código, recompilar e redeployar.
-2. **Configuração estática** — Horários, categoria, orientador estão no `.env`. Mudar exige acesso ao servidor de hospedagem.
-3. **Sem testes automatizados** — Toda validação é manual.
-4. **Sem observabilidade** — Logs vão pro console, sem persistência ou alertas.
-5. **Acoplamento** — Jobs acessam diretamente o banco e o Discord client, dificultando testes e reutilização.
+O MVP foi entregue rápido e funcionava bem, mas tinha débitos técnicos esperados para aquela fase. Abaixo, o diagnóstico original com o estado atual de cada ponto:
+
+1. **Mensagens hardcoded** (resolvido em M1): textos espalhados em `formatters.ts` e nos comandos. Hoje ficam externalizados em `src/mensagens/templates.json`, editáveis sem recompilar.
+2. **Configuração estática** (parcialmente resolvido): categorias, prefixos e horários passaram do `.env` para o `config.json` versionado; falta apenas a reconfiguração em tempo real via comandos `/config`.
+3. **Sem testes automatizados** (resolvido em M4): a suíte Vitest cobre validação, semanas, formatação, repositórios e o fluxo do `/limpar`.
+4. **Sem observabilidade** (pendente, M6): logs ainda vão pro console; falta estruturação e alertas dedicados.
+5. **Acoplamento** (resolvido em M2): o acesso a dados passou a usar o padrão Repository, reduzindo o acoplamento entre jobs, comandos e o banco.
 
 ## Melhorias propostas
 
@@ -171,7 +173,7 @@ jobs:
 
 **Solução em dois níveis:**
 
-- **Nível 1 (imediato):** Logs estruturados em JSON (para Railway parsear) + alerta via DM ao orientador quando um job falha (o circuit breaker já faz isso parcialmente).
+- **Nível 1 (imediato):** Logs estruturados em JSON (parseáveis pelo `journalctl`/systemd ou por qualquer coletor de logs) + alerta via DM ao orientador quando um job falha (o circuit breaker já faz isso parcialmente).
 - **Nível 2 (futuro):** Métricas simples no banco: taxa de adesão semanal, tempo de resposta do bot, uptime. Consumidas pelo dashboard.
 
 ### M7. Dashboard web (Fase 5)
@@ -192,24 +194,24 @@ jobs:
 
 ## Priorização sugerida
 
-| Melhoria                        | Esforço | Impacto | Prioridade |
-| ------------------------------- | ------- | ------- | ---------- |
-| M1. Externalização de mensagens | Médio   | Alto    | 🔴 Alta    |
-| M2. Padrão Repository           | Médio   | Alto    | 🔴 Alta    |
-| M4. Testes automatizados        | Médio   | Alto    | 🔴 Alta    |
-| M5. CI/CD                       | Baixo   | Médio   | 🟡 Média   |
-| M3. Injeção de dependências     | Baixo   | Médio   | 🟡 Média   |
-| M6. Observabilidade             | Médio   | Médio   | 🟡 Média   |
-| M7. Dashboard web               | Alto    | Alto    | 🟢 Futura  |
+| Melhoria                        | Esforço | Impacto | Prioridade | Status       |
+| ------------------------------- | ------- | ------- | ---------- | ------------ |
+| M1. Externalização de mensagens | Médio   | Alto    | 🔴 Alta    | ✅ Concluído |
+| M2. Padrão Repository           | Médio   | Alto    | 🔴 Alta    | ✅ Concluído |
+| M4. Testes automatizados        | Médio   | Alto    | 🔴 Alta    | ✅ Concluído |
+| M5. CI/CD                       | Baixo   | Médio   | 🟡 Média   | ⬜ Pendente  |
+| M3. Injeção de dependências     | Baixo   | Médio   | 🟡 Média   | ⬜ Pendente  |
+| M6. Observabilidade             | Médio   | Médio   | 🟡 Média   | ⬜ Pendente  |
+| M7. Dashboard web               | Alto    | Alto    | 🟢 Futura  | ⬜ Pendente  |
 
 ## Proposta de novas fases no SPEC.md
 
 ### Fase 5 — Engenharia de Software
 
-- [ ] M1: Externalizar mensagens para arquivo JSON + serviço de templates
-- [ ] M2: Implementar padrão Repository para checkins e configurações
+- [x] M1: Externalizar mensagens para arquivo JSON + serviço de templates
+- [x] M2: Implementar padrão Repository para checkins e configurações
 - [ ] M3: Container de injeção de dependências
-- [ ] M4: Testes automatizados com Vitest (unitários + integração)
+- [x] M4: Testes automatizados com Vitest (unitários + integração)
 - [ ] M5: CI/CD com GitHub Actions (typecheck, testes, audit)
 - [ ] M6: Logs estruturados + alertas por DM em falhas de jobs
 

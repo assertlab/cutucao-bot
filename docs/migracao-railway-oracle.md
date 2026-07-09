@@ -2,7 +2,9 @@
 
 ## Por que migrar?
 
-O Railway não permite bots/mirrors em sua plataforma e deixou de oferecer plano gratuito. O Oracle Cloud Free Tier oferece uma instância ARM com 4 OCPUs, 24 GB de RAM e 200 GB de disco permanentemente gratuita (não é trial). É mais do que suficiente para o cutuCÃO.
+O Railway não permite bots/mirrors em sua plataforma e deixou de oferecer plano gratuito. O Oracle Cloud Free Tier oferece instâncias de computação permanentemente gratuitas (não é trial), com 200 GB de disco e 10 TB/mês de banda de saída.
+
+O ideal seria uma instância ARM (VM.Standard.A1.Flex), que chega a 4 OCPUs e 24 GB de RAM, mas ela costuma estar sem capacidade nas regiões e frequentemente não pode ser criada. Na prática, a migração foi feita em uma instância AMD **VM.Standard.E2.1.Micro** (1 OCPU, 1 GB de RAM), que tem mais disponibilidade e é suficiente para o cutuCÃO: o bot consome menos de 30 MB em operação normal. Este guia usa a AMD Micro.
 
 ---
 
@@ -38,10 +40,10 @@ O Railway não permite bots/mirrors em sua plataforma e deixou de oferecer plano
 **Shape:**
 
 - Clique em **"Change shape"**
-- Selecione **"Ampere"** (processadores ARM)
-- Marque **"VM.Standard.A1.Flex"**
-- OCPUs: **1** (suficiente para o cutuCÃO, e sobram 3 para outros usos)
-- Memory: **6 GB** (suficiente, sobram 18 GB)
+- Selecione **"Specialty and previous generation"** → **"VM.Standard.E2.1.Micro"** (AMD, 1 OCPU, 1 GB de RAM)
+- Este é o shape usado neste guia, por ter mais disponibilidade
+
+Sobre a ARM (opcional): a família **"Ampere"** / **"VM.Standard.A1.Flex"** oferece mais recursos (até 4 OCPUs e 24 GB de RAM), mas costuma retornar erro de "out of capacity" na criação. Se quiser tentar, selecione Ampere e configure OCPUs/Memory; se falhar, volte para a AMD Micro. O restante deste guia funciona igual nas duas.
 
 **Networking:**
 
@@ -112,10 +114,22 @@ sudo apt install -y git
 
 ### 4.5. Instalar dependências de compilação
 
-O `better-sqlite3` precisa compilar código nativo para ARM:
+O `better-sqlite3` precisa compilar código nativo:
 
 ```bash
 sudo apt install -y build-essential python3
+```
+
+### 4.6. Criar swap
+
+Com apenas 1 GB de RAM na AMD Micro, o swap evita que o `npm install` seja morto por falta de memória:
+
+```bash
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 ```
 
 ---
@@ -136,11 +150,13 @@ cd cutucao-bot
 npm install
 ```
 
-Se der erro no `better-sqlite3` por causa da arquitetura ARM, tente:
+Se der erro no `better-sqlite3` na compilação do módulo nativo, tente:
 
 ```bash
 npm rebuild better-sqlite3
 ```
+
+Se o processo for morto por falta de memória, confirme que o swap da etapa 4.6 está ativo (`free -h`).
 
 ### 5.3. Configurar variáveis de ambiente
 
@@ -373,7 +389,7 @@ du -sh ~/cutucao-bot/data/
 |Custo|Trial limitado|Gratuito permanente|
 |Deploy|Git push automático|Manual (script) ou SSH|
 |Disco persistente|Volume pago|200 GB incluso|
-|RAM|~512 MB|Até 24 GB|
+|RAM|~512 MB|1 GB (AMD Micro; ARM chega a 24 GB quando há capacidade)|
 |Bots permitidos|Não|Sim|
 |Setup|5 minutos|30-60 minutos|
 |Manutenção|Zero|Baixa (updates do OS)|

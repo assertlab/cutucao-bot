@@ -377,6 +377,7 @@ sudo journalctl -u cutucao --since "24 hours ago"
 | Shape | VM.Standard.E2.1.Micro |
 | CPU / RAM | 1 OCPU / 1 GB |
 | OS | Ubuntu 24.04 LTS |
+| Node.js | 20+ (guia instala 20.x) |
 | Custo | Gratuito permanente |
 | Usuário SSH | `ubuntu` |
 | Diretório do bot | `/home/ubuntu/cutucao-bot` |

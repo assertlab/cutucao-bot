@@ -2,6 +2,8 @@
 
 Este documento descreve todas as premissas, convenções e configurações que o cutuCÃO espera encontrar para funcionar corretamente. Leia antes de configurar uma nova instância ou contribuir com o projeto.
 
+Para colocar o bot no ar do zero em um servidor, consulte o [guia de deploy no Oracle Cloud Free Tier](deploy-oracle-cloud.md), que cobre a instalação completa com systemd.
+
 ---
 
 ## 1. Premissas do servidor Discord
@@ -263,7 +265,7 @@ Use `config.example.json` na raiz do repositório como referência documentada d
 | `DISCORD_TOKEN` | Sim         | Token do bot (Discord Developer Portal → Bot → Reset Token)            | `MTQ5NjQ2...`        |
 | `GUILD_ID`      | Sim         | ID do servidor Discord (botão direito no nome do servidor → Copiar ID) | `123456789012345678` |
 | `ORIENTADOR_ID` | Sim         | ID do usuário que recebe resumos e acessa comandos restritos           | `987654321098765432` |
-| `DATABASE_PATH` | Sim         | Caminho do arquivo SQLite                                              | `./data/base.db`  |
+| `DATABASE_PATH` | Sim         | Caminho do arquivo SQLite                                              | `./data/cutucao.db`  |
 | `TZ`            | Sim         | Fuso horário para os agendamentos (formato IANA)                       | `America/Recife`     |
 
 **Como obter IDs:** Ative o Modo de Desenvolvedor no Discord (Configurações → Avançado → Modo de Desenvolvedor). Depois, clique com botão direito em qualquer elemento para ver a opção "Copiar ID".
@@ -329,11 +331,14 @@ Checklist completa para colocar o cutuCÃO no ar em um novo servidor:
 - [ ] Verificar que o log mostra: "Categorias [...] detectadas com X canal(is)"
 - [ ] Testar com `/teste-lembrete`
 
-### Na hospedagem (Railway ou similar)
+### Na hospedagem (Oracle Cloud ou similar)
 
-- [ ] Conectar o repositório
-- [ ] Configurar as 5 variáveis de ambiente no dashboard
-- [ ] Adicionar volume persistente para o SQLite
+Para o deploy do zero em uma VM gratuita, siga o [guia de deploy no Oracle Cloud](deploy-oracle-cloud.md), que cobre a criação da instância, instalação do Node.js, o serviço systemd e o script de atualização. Em resumo:
+
+- [ ] Provisionar a VM e instalar Node.js 20+, Git e dependências de compilação
+- [ ] Clonar o repositório e rodar `npm install`
+- [ ] Criar o `.env` com as 5 variáveis e o `config.json` na VM
+- [ ] Rodar `npm run build` e configurar o serviço systemd
 - [ ] Verificar nos logs que o bot logou com sucesso
 - [ ] Parar a instância local
 
@@ -457,7 +462,7 @@ O estado do pedido pendente é mantido em memória — se o bot reiniciar entre 
 ### O bot não encontra os canais
 
 ```
-🐕 Categoria "Orientações" detectada com 0 canal(is) de orientação.
+🐕 Categorias ["Orientações"] detectadas com 0 canal(is) de orientação.
 ```
 
 **Causas possíveis:**
@@ -474,9 +479,16 @@ O estado do pedido pendente é mantido em memória — se o bot reiniciar entre 
 
 **Causa:** O bot não tem permissão de Enviar Mensagens no canal. Solução: adicionar o cargo do bot nas permissões da categoria "Orientações" com Send Messages habilitado.
 
-### Bot fica offline no Railway
+### Bot fica offline na hospedagem
 
-Verificar nos logs do Railway se as variáveis de ambiente estão configuradas. O erro mais comum é `DISCORD_TOKEN` ausente ou inválido.
+No Oracle Cloud (ou qualquer VPS com systemd), verifique o estado e os logs do serviço:
+
+```bash
+sudo systemctl status cutucao
+sudo journalctl -u cutucao -n 30
+```
+
+O erro mais comum é `DISCORD_TOKEN` ausente ou inválido no `.env`. Consulte a seção de troubleshooting do [guia de deploy no Oracle Cloud](deploy-oracle-cloud.md) para falhas de conexão, SSH e memória durante o `npm install`.
 
 ### Check-in não é detectado
 
