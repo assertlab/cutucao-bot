@@ -42,7 +42,7 @@
   "cmd_ajuda": {
     "categoria": "comando",
     "descricao": "Conteúdo do comando /ajuda — lista todos os comandos disponíveis",
-    "texto": "🐕 **Comandos do cutuCÃO**\n\n**Para todos:**\n`/template` — Exibe o template de check-in para copiar e colar\n`/ajuda` — Exibe esta lista de comandos\n\n**Só pro orientador:**\n`/status` — Mostra quem postou e quem não postou o check-in esta semana\n`/resumo #canal` — Histórico de check-ins de um canal (últimas semanas configuráveis)\n`/uso` — Estatísticas de uso do banco de dados\n`/exportar escopo` — Exporta check-ins em JSON por DM. Escopos: tudo, canal, nivel, periodo\n`/limpar escopo` — Remove registros com confirmação. Escopos: tudo, canal, canais, nivel\n`/teste-lembrete` — Dispara manualmente o job de lembrete de check-in\n`/teste-boas-vindas` — Simula a mensagem de boas-vindas no canal de entrada"
+    "texto": "🐕 **Comandos do cutuCÃO**\n\n**Para todos:**\n`/template` — Exibe o template de check-in para copiar e colar\n`/ajuda` — Exibe esta lista de comandos\n\n**Só pro orientador:**\n`/status` — Mostra quem postou e quem não postou o check-in esta semana\n`/canais` — Lista todos os canais monitorados, agrupados por categoria e nível\n`/resumo #canal` — Histórico de check-ins de um canal (últimas semanas configuráveis)\n`/uso` — Estatísticas de uso do banco de dados\n`/exportar escopo` — Exporta check-ins em JSON por DM. Escopos: tudo, canal, nivel, periodo\n`/limpar escopo` — Remove registros com confirmação. Escopos: tudo, canal, canais, nivel\n`/teste-lembrete` — Dispara manualmente o job de lembrete de check-in\n`/teste-boas-vindas` — Simula a mensagem de boas-vindas no canal de entrada"
   },
   "cmd_status_sem_dados": {
     "categoria": "comando",
@@ -58,6 +58,16 @@
     "categoria": "comando",
     "descricao": "Exibido na seção 'postaram' do /status quando nenhum aluno postou ainda",
     "texto": "- (nenhum ainda)"
+  },
+  "cmd_canais_conteudo": {
+    "categoria": "comando",
+    "descricao": "Resposta do /canais com a lista de canais monitorados, agrupados por categoria e nível",
+    "texto": "🐕 **Canais monitorados ({{total}})**\n\n{{corpo}}"
+  },
+  "cmd_canais_sem_canais": {
+    "categoria": "comando",
+    "descricao": "Resposta do /canais quando nenhum canal monitorado é encontrado no servidor",
+    "texto": "🐕 Nenhum canal monitorado encontrado.\nVerifique se as categorias e prefixos em `config.json` correspondem aos canais existentes no servidor."
   },
   "cmd_resumo_historico": {
     "categoria": "comando",
