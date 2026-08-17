@@ -1,5 +1,6 @@
 import { SlashCommand } from "./types";
 import { ajudaCommand } from "./ajuda";
+import { canaisCommand } from "./canais";
 import { exportarCommand } from "./exportar";
 import { limparCommand } from "./limpar";
 import { resumoCommand } from "./resumo";
@@ -11,6 +12,7 @@ import { usoCommand } from "./uso";
 
 const todos: SlashCommand[] = [
   ajudaCommand,
+  canaisCommand,
   exportarCommand,
   limparCommand,
   resumoCommand,
