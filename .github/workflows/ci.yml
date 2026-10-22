@@ -1,0 +1,45 @@
+name: ✅ CI
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+# Cancela execuções antigas da mesma branch quando chega um novo push
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 20 = produção (Oracle Cloud); 24 = alvo da próxima migração LTS
+        node-version: [ 20, 24 ]
+    name: Node ${{ matrix.node-version }}
+    steps:
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v7
+
+      - name: 🟢 Configurando Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: 📦 Instalando dependências
+        run: npm ci
+
+      - name: 🔎 Typecheck
+        run: npm run typecheck
+
+      - name: 🧪 Testes
+        run: npm test
+
+      - name: 🏗️ Build
+        run: npm run build
