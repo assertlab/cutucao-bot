@@ -19,8 +19,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # 20 = produção (Oracle Cloud); 24 = alvo da próxima migração LTS
-        node-version: [ 20, 24 ]
+        # Mesma versão major da produção (Oracle Cloud)
+        node-version: [ 24 ]
     name: Node ${{ matrix.node-version }}
     steps:
       - name: 📥 Checkout do código
