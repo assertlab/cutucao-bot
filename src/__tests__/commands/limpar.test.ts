@@ -1,5 +1,13 @@
 import { ButtonInteraction } from "discord.js";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  type Mock,
+  vi,
+} from "vitest";
 import { onLimparButton } from "../../commands/limpar";
 import {
   limparTodosPendentes,
@@ -40,12 +48,16 @@ afterEach(() => {
   limparTodosPendentes();
 });
 
+// Assinatura genérica: o Mock padrão do Vitest 4 não é atribuível aos métodos
+// sobrecarregados de ButtonInteraction (ex.: deferUpdate).
+type AnyMock = Mock<(...args: any[]) => any>;
+
 interface MockInteraction extends ButtonInteraction {
-  update: ReturnType<typeof vi.fn>;
-  deferUpdate: ReturnType<typeof vi.fn>;
-  editReply: ReturnType<typeof vi.fn>;
-  followUp: ReturnType<typeof vi.fn>;
-  reply: ReturnType<typeof vi.fn>;
+  update: AnyMock;
+  deferUpdate: AnyMock;
+  editReply: AnyMock;
+  followUp: AnyMock;
+  reply: AnyMock;
 }
 
 function mockButtonInteraction(
