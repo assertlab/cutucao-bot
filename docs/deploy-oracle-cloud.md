@@ -304,7 +304,7 @@ du -sh ~/cutucao-bot/data/
 
 ### Atualizar a versão major do Node.js
 
-O `better-sqlite3` é um módulo nativo, compilado para uma versão específica do Node. Ao trocar de major (ex.: 20 → 24), é preciso reinstalar as dependências, senão o bot falha ao iniciar com `NODE_MODULE_VERSION`.
+Desde a versão 13, o `better-sqlite3` usa N-API e traz binários prontos que funcionam em qualquer versão do Node, sem compilar nada na VM. Mesmo assim, reinstale as dependências do zero ao trocar de major: é barato e evita resíduos da versão anterior.
 
 ```bash
 # 1. Backup do banco
@@ -316,7 +316,7 @@ curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
 sudo apt install -y nodejs
 node --version
 
-# 3. Reinstalar dependências do zero e recompilar
+# 3. Reinstalar dependências do zero
 cd ~/cutucao-bot
 git pull
 rm -rf node_modules
@@ -371,6 +371,17 @@ sudo journalctl -u cutucao -n 30
 - Verifique se o IP público está atribuído (Compute → Instance → Attached VNICs)
 - Verifique a Security List: deve ter regra de Ingress para porta 22 TCP
 - Verifique o firewall do OS: `sudo iptables -L -n` (Ubuntu 24.04 geralmente não tem regras restritivas por padrão)
+
+### Bot não inicia com `ERR_DLOPEN_FAILED`
+
+O binário do `better-sqlite3` não carregou. O pacote traz binários prontos em `node_modules/better-sqlite3/prebuilds/` (inclusive `linux-x64.node`) e o script de compilação fica desativado em `allowScripts` no `package.json`. Reinstale as dependências do zero:
+
+```bash
+cd ~/cutucao-bot
+rm -rf node_modules
+npm ci
+sudo systemctl restart cutucao
+```
 
 ### npm ci falha por memória
 
