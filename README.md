@@ -44,7 +44,7 @@ O cutuCÃO nasce de uma filosofia simples: **o aluno é dono do próprio progres
 
 ## Stack
 
-- **Runtime:** Node.js 20+
+- **Runtime:** Node.js 24+
 - **Linguagem:** TypeScript
 - **Framework:** discord.js v14
 - **Banco de dados:** SQLite (via better-sqlite3)
@@ -53,7 +53,7 @@ O cutuCÃO nasce de uma filosofia simples: **o aluno é dono do próprio progres
 
 ## Pré-requisitos
 
-- [Node.js](https://nodejs.org/) 20 ou superior
+- [Node.js](https://nodejs.org/) 24 ou superior
 - [Git](https://git-scm.com/)
 - Uma aplicação de bot criada no [Discord Developer Portal](https://discord.com/developers/applications)
 

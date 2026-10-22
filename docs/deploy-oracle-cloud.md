@@ -89,10 +89,10 @@ Execute os comandos abaixo na instância:
 sudo apt update && sudo apt upgrade -y
 ```
 
-### 4.2. Instalar Node.js 20
+### 4.2. Instalar Node.js 24
 
 ```bash
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
 sudo apt install -y nodejs
 
 # Verificar
@@ -299,6 +299,34 @@ df -h
 du -sh ~/cutucao-bot/data/
 ```
 
+### Atualizar a versão major do Node.js
+
+O `better-sqlite3` é um módulo nativo, compilado para uma versão específica do Node. Ao trocar de major (ex.: 20 → 24), é preciso reinstalar as dependências, senão o bot falha ao iniciar com `NODE_MODULE_VERSION`.
+
+```bash
+# 1. Backup do banco
+cp ~/cutucao-bot/data/cutucao.db ~/cutucao-db-backup-$(date +%F).db
+
+# 2. Parar o bot e trocar o Node (substitua 24 pela versão desejada)
+sudo systemctl stop cutucao
+curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
+sudo apt install -y nodejs
+node --version
+
+# 3. Reinstalar dependências do zero e recompilar
+cd ~/cutucao-bot
+git pull
+rm -rf node_modules
+npm ci
+npm run build
+
+# 4. Subir e conferir
+sudo systemctl start cutucao
+sudo journalctl -u cutucao -n 30 --no-pager
+```
+
+Se algo der errado, repita o passo 2 com a versão anterior (`setup_20.x`) e o passo 3.
+
 ### Atualizar o sistema operacional
 
 Faça pelo menos uma vez por mês:
@@ -377,7 +405,7 @@ sudo journalctl -u cutucao --since "24 hours ago"
 | Shape | VM.Standard.E2.1.Micro |
 | CPU / RAM | 1 OCPU / 1 GB |
 | OS | Ubuntu 24.04 LTS |
-| Node.js | 20+ (guia instala 20.x) |
+| Node.js | 24+ (guia instala 24.x) |
 | Custo | Gratuito permanente |
 | Usuário SSH | `ubuntu` |
 | Diretório do bot | `/home/ubuntu/cutucao-bot` |
