@@ -336,7 +336,7 @@ Checklist completa para colocar o cutuCÃO no ar em um novo servidor:
 Para o deploy do zero em uma VM gratuita, siga o [guia de deploy no Oracle Cloud](deploy-oracle-cloud.md), que cobre a criação da instância, instalação do Node.js, o serviço systemd e o script de atualização. Em resumo:
 
 - [ ] Provisionar a VM e instalar Node.js 24+, Git e dependências de compilação
-- [ ] Clonar o repositório e rodar `npm install`
+- [ ] Clonar o repositório e rodar `npm ci`
 - [ ] Criar o `.env` com as 5 variáveis e o `config.json` na VM
 - [ ] Rodar `npm run build` e configurar o serviço systemd
 - [ ] Verificar nos logs que o bot logou com sucesso
@@ -488,7 +488,7 @@ sudo systemctl status cutucao
 sudo journalctl -u cutucao -n 30
 ```
 
-O erro mais comum é `DISCORD_TOKEN` ausente ou inválido no `.env`. Consulte a seção de troubleshooting do [guia de deploy no Oracle Cloud](deploy-oracle-cloud.md) para falhas de conexão, SSH e memória durante o `npm install`.
+O erro mais comum é `DISCORD_TOKEN` ausente ou inválido no `.env`. Consulte a seção de troubleshooting do [guia de deploy no Oracle Cloud](deploy-oracle-cloud.md) para falhas de conexão, SSH e memória durante o `npm ci`.
 
 ### Check-in não é detectado
 

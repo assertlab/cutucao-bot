@@ -108,7 +108,7 @@ sudo apt install -y git build-essential python3
 
 ### 4.4. Criar swap
 
-Com 1 GB de RAM, o swap é importante para evitar que o `npm install` falhe:
+Com 1 GB de RAM, o swap é importante para evitar que o `npm ci` falhe:
 
 ```bash
 sudo fallocate -l 2G /swapfile
@@ -133,7 +133,7 @@ cd cutucao-bot
 ### 5.2. Instalar dependências
 
 ```bash
-npm install
+npm ci
 ```
 
 ### 5.3. Configurar variáveis de ambiente
@@ -251,13 +251,16 @@ Conteúdo:
 
 ```bash
 #!/bin/bash
+set -e  # interrompe no primeiro erro, sem reiniciar o bot com código pela metade
 cd /home/ubuntu/cutucao-bot
 git pull
-npm install
+npm ci
 npm run build
 sudo systemctl restart cutucao
 echo "🐕 cutuCÃO atualizado e reiniciado!"
 ```
+
+O `npm ci` instala exatamente o que está no `package-lock.json` e não o modifica. Com `npm install`, o lockfile do servidor pode ser reescrito e o próximo `git pull` falha por conflito.
 
 ```bash
 chmod +x ~/update-cutucao.sh
@@ -369,7 +372,7 @@ sudo journalctl -u cutucao -n 30
 - Verifique a Security List: deve ter regra de Ingress para porta 22 TCP
 - Verifique o firewall do OS: `sudo iptables -L -n` (Ubuntu 24.04 geralmente não tem regras restritivas por padrão)
 
-### npm install falha por memória
+### npm ci falha por memória
 
 Se o processo for morto por falta de memória durante a instalação:
 
