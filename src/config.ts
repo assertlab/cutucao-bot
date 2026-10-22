@@ -1,4 +1,11 @@
-import "dotenv/config";
+import { existsSync } from "node:fs";
+
+// Carrega o .env com o leitor nativo do Node. Variáveis já definidas no
+// ambiente (ex.: EnvironmentFile do systemd) têm precedência sobre o arquivo.
+const envFile = process.env.ENV_FILE ?? ".env";
+if (existsSync(envFile)) {
+  process.loadEnvFile(envFile);
+}
 
 function required(name: string): string {
   const value = process.env[name];
