@@ -335,7 +335,7 @@ Checklist completa para colocar o cutuCÃO no ar em um novo servidor:
 
 Para o deploy do zero em uma VM gratuita, siga o [guia de deploy no Oracle Cloud](deploy-oracle-cloud.md), que cobre a criação da instância, instalação do Node.js, o serviço systemd e o script de atualização. Em resumo:
 
-- [ ] Provisionar a VM e instalar Node.js 20+, Git e dependências de compilação
+- [ ] Provisionar a VM e instalar Node.js 24+, Git e dependências de compilação
 - [ ] Clonar o repositório e rodar `npm install`
 - [ ] Criar o `.env` com as 5 variáveis e o `config.json` na VM
 - [ ] Rodar `npm run build` e configurar o serviço systemd
