@@ -1,0 +1,202 @@
+---
+layout: home
+title: cutuCÃO
+---
+<header class="hero">
+  <div class="wrap">
+    <div class="topbar-inner hero-nav">
+      <a class="brand" href="{{ '/' | relative_url }}">
+        <img src="{{ '/assets/cutucao-logo.svg' | relative_url }}" alt="" width="36" height="36">
+        <span>cutu<b>CÃO</b></span>
+      </a>
+      <nav aria-label="Principal">
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#privacidade">Privacidade</a>
+        <a href="#documentacao">Documentação</a>
+        <a href="{{ site.repo_url }}">GitHub</a>
+      </nav>
+    </div>
+
+    <div class="hero-grid" id="conteudo">
+      <div class="hero-copy">
+        <p class="eyebrow">Bot Discord do ASSERT Lab · CIn-UFPE</p>
+        <h1>O vira-lata caramelo que <span>não te deixa esquecer</span> o check-in.</h1>
+        <p class="lead">Lembretes semanais, cobrança com carinho e um relatório silencioso para o orientador. Tudo assíncrono, sem microgerenciamento e sem ler uma única mensagem sua.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="{{ '/guia-operacional' | relative_url }}">Ler o guia operacional</a>
+          <a class="btn btn-ghost" href="{{ site.repo_url }}">Ver código no GitHub</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="halo"></div>
+        <img src="{{ '/assets/cutucao-logo.svg' | relative_url }}" alt="" width="360" height="360">
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section" id="filosofia">
+    <div class="wrap narrow">
+      <p class="kicker">Por que existe</p>
+      <h2>O aluno é dono do próprio progresso. O orientador só precisa enxergar.</h2>
+      <p>Orientar 15 alunos ou mais ao mesmo tempo vira um problema de comunicação: conversas se perdem, o WhatsApp mistura vida pessoal com pesquisa, e cobrar um por um toma tempo. Trello e Notion foram testados e criaram mais burocracia do que ajuda.</p>
+      <p>O cutuCÃO automatiza o ritual do check-in semanal e transforma o silêncio em dado: <strong>se o aluno não postou, isso já é o sinal de alerta.</strong></p>
+    </div>
+  </section>
+
+  <section class="section alt" id="como-funciona">
+    <div class="wrap">
+      <p class="kicker">Como funciona</p>
+      <h2>Uma semana com o cutuCÃO</h2>
+      <ol class="week">
+        <li class="day on">
+          <span class="dow">Seg</span>
+          <span class="when">09:00</span>
+          <span class="icon" aria-hidden="true">🔔</span>
+          <strong>Lembrete</strong>
+          <span>Um lembrete com o template de check-in em cada canal de orientação.</span>
+        </li>
+        <li class="day off">
+          <span class="dow">Ter</span>
+          <span class="icon" aria-hidden="true">✍️</span>
+          <strong>Hora de postar</strong>
+          <span>Postou no canal? O check-in da semana já está registrado.</span>
+        </li>
+        <li class="day on">
+          <span class="dow">Qua</span>
+          <span class="when">09:00</span>
+          <span class="icon" aria-hidden="true">🐕</span>
+          <strong>Cutucada gentil</strong>
+          <span>Quem ainda não postou recebe um lembrete amigável. Depois de duas semanas de silêncio (configurável), o orientador é avisado.</span>
+        </li>
+        <li class="day off">
+          <span class="dow">Qui</span>
+          <span class="icon" aria-hidden="true">✍️</span>
+          <strong>Ainda dá tempo</strong>
+          <span>Qualquer mensagem no canal conta como check-in.</span>
+        </li>
+        <li class="day on">
+          <span class="dow">Sex</span>
+          <span class="when">18:00</span>
+          <span class="icon" aria-hidden="true">📊</span>
+          <strong>Relatório</strong>
+          <span>O orientador recebe por DM quem postou, quem não postou e quantas semanas seguidas de silêncio.</span>
+        </li>
+      </ol>
+      <p class="fineprint">Horários padrão (fuso America/Recife), configuráveis em <code>config.json</code>.</p>
+    </div>
+  </section>
+
+  <section class="section" id="funcionalidades">
+    <div class="wrap">
+      <p class="kicker">Funcionalidades</p>
+      <h2>Pouca coisa, bem feita</h2>
+      <div class="cards">
+        <article class="card">
+          <span class="icon" aria-hidden="true">🔍</span>
+          <h3>Detecção automática</h3>
+          <p>Canais com prefixo <code>phd-</code>, <code>msc-</code> ou <code>bsc-</code> na categoria “Orientações” são monitorados sozinhos. Criou um canal novo? O cutuCÃO já começa a vigiar.</p>
+        </article>
+        <article class="card">
+          <span class="icon" aria-hidden="true">👋</span>
+          <h3>Boas-vindas</h3>
+          <p>Quem entra no servidor recebe uma mensagem de boas-vindas com as orientações do laboratório.</p>
+        </article>
+        <article class="card">
+          <span class="icon" aria-hidden="true">🗂️</span>
+          <h3>Gestão de dados</h3>
+          <p>O orientador exporta o histórico em JSON por DM e limpa registros com confirmação obrigatória por botão.</p>
+        </article>
+        <article class="card">
+          <span class="icon" aria-hidden="true">🛡️</span>
+          <h3>Feito para não incomodar</h3>
+          <p>Limites internos contra spam e um disjuntor que pausa jobs que falham repetidamente.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section privacy" id="privacidade">
+    <div class="wrap">
+      <p class="kicker">Privacidade</p>
+      <h2>Dados mínimos, por desenho</h2>
+      <p class="section-lead">O cutuCÃO lida com orientações reais, então guarda o mínimo necessário e nunca o que você escreve.</p>
+      <ul class="facts">
+        <li>
+          <strong>0</strong>
+          <span>mensagens lidas. A permissão <em>Message Content</em> fica desativada: o bot só sabe que houve atividade no canal.</span>
+        </li>
+        <li>
+          <strong>6</strong>
+          <span>colunas no banco: canal, nível, semana e o check-in (se houve e quando). Nada de IDs de alunos ou e-mails.</span>
+        </li>
+        <li>
+          <strong>1</strong>
+          <span>servidor Discord. O bot recusa operar em qualquer outro.</span>
+        </li>
+        <li>
+          <strong>MIT</strong>
+          <span>código aberto. Você pode auditar tudo o que ele faz.</span>
+        </li>
+      </ul>
+      <p class="links-inline">
+        <a href="{{ '/politica-de-privacidade' | relative_url }}">Política de privacidade</a>
+        <a href="{{ '/termos-de-servico' | relative_url }}">Termos de serviço</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section alt" id="comandos">
+    <div class="wrap">
+      <p class="kicker">Comandos</p>
+      <h2>Slash commands</h2>
+      <div class="cmd-cols">
+        <div>
+          <h3>Para todo mundo</h3>
+          <dl class="cmds">
+            <div><dt><code>/template</code></dt><dd>Exibe o template de check-in para copiar e colar.</dd></div>
+            <div><dt><code>/ajuda</code></dt><dd>Lista os comandos disponíveis.</dd></div>
+          </dl>
+        </div>
+        <div>
+          <h3>Só para o orientador</h3>
+          <dl class="cmds">
+            <div><dt><code>/status</code></dt><dd>Quem postou e quem não postou na semana.</dd></div>
+            <div><dt><code>/resumo</code></dt><dd>Histórico de check-ins de um canal.</dd></div>
+            <div><dt><code>/canais</code></dt><dd>Canais monitorados, por categoria e nível.</dd></div>
+            <div><dt><code>/uso</code></dt><dd>Estatísticas e tamanho do banco.</dd></div>
+            <div><dt><code>/exportar</code></dt><dd>JSON por DM, com filtros por canal, nível ou período.</dd></div>
+            <div><dt><code>/limpar</code></dt><dd>Remove registros, com confirmação por botão.</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="documentacao">
+    <div class="wrap">
+      <p class="kicker">Documentação</p>
+      <h2>Quer rodar o seu?</h2>
+      <p class="section-lead">O cutuCÃO é código aberto. Adapte para o seu grupo de pesquisa.</p>
+      <div class="cards docs-cards">
+        <a class="card link-card" href="{{ '/guia-operacional' | relative_url }}">
+          <h3>Guia operacional →</h3>
+          <p>Premissas do servidor, nomenclatura, configuração, comandos e solução de problemas.</p>
+        </a>
+        <a class="card link-card" href="{{ '/deploy-oracle-cloud' | relative_url }}">
+          <h3>Deploy no Oracle Cloud →</h3>
+          <p>Do zero a um bot 24/7 em uma VM gratuita, com systemd.</p>
+        </a>
+        <a class="card link-card" href="{{ site.repo_url }}/blob/main/SPEC.md">
+          <h3>Especificação técnica →</h3>
+          <p>Arquitetura, fluxos detalhados e decisões de segurança.</p>
+        </a>
+        <a class="card link-card" href="{{ site.repo_url }}/blob/main/CONTRIBUTING.md">
+          <h3>Como contribuir →</h3>
+          <p>Convenções de commit, testes e como abrir um PR.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>

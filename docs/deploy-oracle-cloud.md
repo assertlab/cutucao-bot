@@ -219,6 +219,7 @@ ProtectControlGroups=true
 LockPersonality=true
 RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
 CapabilityBoundingSet=
+UMask=0077
 
 [Install]
 WantedBy=multi-user.target
@@ -226,7 +227,18 @@ WantedBy=multi-user.target
 
 Salve com `Ctrl+O`, Enter, `Ctrl+X`.
 
-As diretivas de segurança no serviço garantem que o bot não consiga escrever fora da pasta `data/` (`ProtectSystem`, `ReadWritePaths`), não ganhe privilégios (`NoNewPrivileges`, `CapabilityBoundingSet=`), use `/tmp` próprio (`PrivateTmp`) e abra apenas sockets IP e locais (`RestrictAddressFamilies`).
+As diretivas de segurança no serviço garantem que o bot não consiga escrever fora da pasta `data/` (`ProtectSystem`, `ReadWritePaths`), não ganhe privilégios (`NoNewPrivileges`, `CapabilityBoundingSet=`), use `/tmp` próprio (`PrivateTmp`) abra apenas sockets IP e locais (`RestrictAddressFamilies`) e crie todo arquivo novo (como os `-wal` e `-shm` do SQLite) legível só pelo próprio usuário (`UMask=0077`).
+
+Em um servidor que já está rodando, não é preciso editar o unit: crie um *drop-in* só com o `UMask` e reinicie.
+
+```bash
+sudo mkdir -p /etc/systemd/system/cutucao.service.d
+printf '[Service]\nUMask=0077\n' | sudo tee /etc/systemd/system/cutucao.service.d/umask.conf
+sudo systemctl daemon-reload
+sudo systemctl restart cutucao
+```
+
+O `UMask` só vale para arquivos criados depois do restart; os que já existem mantêm a permissão atual (ajuste com `chmod 600`/`700` se preciso).
 
 Depois de iniciar o serviço, confira a pontuação de exposição com `systemd-analyze security cutucao`. Se o bot não conseguir conectar após adicionar essas diretivas, remova `RestrictAddressFamilies` primeiro e veja `journalctl -u cutucao -n 50`.
 

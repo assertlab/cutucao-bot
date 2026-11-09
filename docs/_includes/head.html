@@ -1,0 +1,26 @@
+{%- assign page_title = page.title | default: site.title -%}
+{%- if page.url == "/" -%}
+  {%- assign full_title = "cutuCÃO — o vira-lata caramelo do check-in semanal" -%}
+{%- elsif page_title contains "cutuCÃO" -%}
+  {%- assign full_title = page_title -%}
+{%- else -%}
+  {%- assign full_title = page_title | append: " · cutuCÃO" -%}
+{%- endif -%}
+{%- assign page_desc = page.description | default: site.description -%}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ full_title }}</title>
+<meta name="description" content="{{ page_desc | escape }}">
+<meta name="theme-color" content="#1a1c2e">
+<link rel="icon" type="image/svg+xml" href="{{ '/assets/cutucao-logo.svg' | relative_url }}">
+<link rel="apple-touch-icon" href="{{ '/assets/cutucao-logo-512.png' | relative_url }}">
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="cutuCÃO">
+<meta property="og:title" content="{{ full_title | escape }}">
+<meta property="og:description" content="{{ page_desc | escape }}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+<meta property="og:image" content="{{ '/assets/cutucao-logo-512.png' | absolute_url }}">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">

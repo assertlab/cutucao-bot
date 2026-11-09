@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  {% include head.html %}
+</head>
+<body class="doc-page">
+  <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="{{ '/' | relative_url }}">
+        <img src="{{ '/assets/cutucao-logo.svg' | relative_url }}" alt="" width="36" height="36">
+        <span>cutu<b>CÃO</b></span>
+      </a>
+      <nav aria-label="Principal">
+        <a href="{{ '/guia-operacional' | relative_url }}">Guia</a>
+        <a href="{{ '/politica-de-privacidade' | relative_url }}">Privacidade</a>
+        <a href="{{ '/termos-de-servico' | relative_url }}">Termos</a>
+        <a href="{{ site.repo_url }}">GitHub</a>
+      </nav>
+    </div>
+  </header>
+  <main id="conteudo" class="wrap doc">
+    <a class="back" href="{{ '/' | relative_url }}">← Início</a>
+    {{ content }}
+  </main>
+  {% include footer.html %}
+</body>
+</html>
