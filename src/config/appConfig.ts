@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import cron from "node-cron";
+import { isValidPrefixo } from "../utils/validacao";
 
 export interface AppConfig {
   categorias: string[];
@@ -50,6 +51,18 @@ function validate(cfg: AppConfig): void {
   }
   if (Object.keys(cfg.prefixos).length === 0) {
     throw new Error("🐕 config.json inválido: 'prefixos' não pode ser vazio.");
+  }
+  for (const [chave, label] of Object.entries(cfg.prefixos)) {
+    if (!isValidPrefixo(chave)) {
+      throw new Error(
+        `🐕 config.json inválido: prefixo "${chave}" deve conter apenas letras minúsculas e dígitos (até 20 caracteres).`,
+      );
+    }
+    if (typeof label !== "string" || label.trim() === "") {
+      throw new Error(
+        `🐕 config.json inválido: o rótulo do prefixo "${chave}" deve ser um texto não vazio.`,
+      );
+    }
   }
   const cronFields: Array<[string, string]> = [
     ["horarios.lembrete", cfg.horarios.lembrete],
