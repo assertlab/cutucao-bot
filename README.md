@@ -204,6 +204,8 @@ Além deste README e da [SPEC.md](SPEC.md) (especificação técnica completa), 
 
 Contribuições são bem-vindas! Se você é aluno do ASSERT Lab ou de outro grupo de pesquisa interessado em usar o cutuCÃO:
 
+> 📘 Leia o **[guia de contribuição](CONTRIBUTING.md)** antes de começar. Ao participar, você concorda com o nosso **[Código de Conduta](CODE_OF_CONDUCT.md)**. Para reportar bugs ou sugerir funcionalidades, use os templates em **Issues → New issue**.
+
 ### Como contribuir
 
 1. Faça um fork do repositório
