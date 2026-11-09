@@ -275,3 +275,8 @@ O cutuCÃO foi concebido, especificado e desenvolvido com o apoio do [Claude](ht
 <p align="center">
   <em>Porque travar não é problema. Silêncio é.</em> 🐕
 </p>
+
+<p align="center">
+  © 2026 Vinicius Cardoso Garcia. Licenciado sob <a href="LICENSE">MIT</a>.<br>
+  Powered by <a href="https://assertlab.github.io/">ASSERT Lab</a>. Orgulhosamente feito em Recife 🦈
+</p>
