@@ -1,0 +1,109 @@
+name: 🐛 Reportar bug
+description: Algo não está funcionando como deveria no cutuCÃO
+title: "[Bug]: "
+labels: ["bug", "triagem"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por reportar! Antes de enviar, confira se já não existe uma issue sobre o mesmo problema.
+
+        ⚠️ **Não cole tokens, IDs de servidor/usuário nem nomes de alunos.** Se o problema for uma vulnerabilidade de segurança, não abra issue pública: siga as instruções do [CONTRIBUTING.md](https://github.com/assertlab/cutucao-bot/blob/main/CONTRIBUTING.md#questões-de-segurança).
+
+  - type: textarea
+    id: descricao
+    attributes:
+      label: O que aconteceu?
+      description: Descreva o bug de forma clara e objetiva.
+      placeholder: "Ex.: a cobrança de quarta foi enviada para um canal onde o aluno já tinha postado."
+    validations:
+      required: true
+
+  - type: textarea
+    id: esperado
+    attributes:
+      label: O que você esperava que acontecesse?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproducao
+    attributes:
+      label: Como reproduzir
+      description: Passo a passo para reproduzir o problema.
+      placeholder: |
+        1. Criar o canal `msc-teste` na categoria "Orientações"
+        2. Postar uma mensagem na terça
+        3. Rodar `/teste-lembrete`
+        4. ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área afetada
+      multiple: true
+      options:
+        - Lembrete (segunda)
+        - Cobrança (quarta)
+        - Resumo semanal (sexta)
+        - Boas-vindas
+        - Detecção de canais / check-in
+        - Comando slash
+        - Gestão de dados (/uso, /exportar, /limpar)
+        - Configuração (config.json / .env)
+        - Deploy / infraestrutura
+        - Outro
+    validations:
+      required: true
+
+  - type: input
+    id: versao-bot
+    attributes:
+      label: Versão do cutuCÃO
+      description: Veja o campo `version` no `package.json` ou o hash do commit.
+      placeholder: "1.3.0"
+    validations:
+      required: true
+
+  - type: input
+    id: versao-node
+    attributes:
+      label: Versão do Node.js
+      description: Saída de `node --version`.
+      placeholder: "v24.x.x"
+
+  - type: dropdown
+    id: ambiente
+    attributes:
+      label: Onde o bot está rodando?
+      options:
+        - Oracle Cloud (systemd)
+        - Outra VPS
+        - Fly.io
+        - Máquina local (desenvolvimento)
+        - Outro
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs relevantes
+      description: "Cole trechos do log (ex.: `journalctl -u cutucao`). Lembre de remover dados sensíveis."
+      render: shell
+
+  - type: textarea
+    id: contexto
+    attributes:
+      label: Contexto adicional
+      description: Prints, configurações alteradas no `config.json`, qualquer coisa que ajude.
+
+  - type: checkboxes
+    id: confirmacoes
+    attributes:
+      label: Confirmações
+      options:
+        - label: Procurei nas issues existentes e não encontrei este problema.
+          required: true
+        - label: Removi tokens, IDs e nomes de alunos do que colei acima.
+          required: true
