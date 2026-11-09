@@ -1,8 +1,9 @@
 title: cutuCÃO
 description: O vira-lata caramelo que não te deixa esquecer o check-in. Bot Discord do ASSERT Lab (CIn-UFPE) para acompanhamento de orientações.
 lang: pt-BR
-url: "https://assertlab.github.io"
-baseurl: "/cutucao-bot"
+# Domínio próprio (CNAME em docs/CNAME): o site fica na raiz, sem baseurl
+url: "https://cutucao.assertlab.com"
+baseurl: ""
 repo_url: "https://github.com/assertlab/cutucao-bot"
 
 # Plugins liberados no GitHub Pages
