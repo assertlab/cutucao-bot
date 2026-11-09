@@ -36,8 +36,10 @@ export function nivelFromChannelName(
 }
 
 export function sanitizeDisplayName(name: string): string {
-  return name.replace(/[*_~`|>@#\\]/g, "").slice(0, 80);
+  return name.replace(/[*_~`|>@#\\[\]<\r\n]/g, "").slice(0, 80);
 }
+
+export const MAX_CANAIS_LISTA = 50;
 
 export function parseListaNomesCanais(lista: string): string[] {
   return lista
