@@ -241,6 +241,7 @@ Usamos [Conventional Commits](https://www.conventionalcommits.org/):
 - [x] **v1.1.0**: Engenharia de software: mensagens externalizadas em JSON, padrão Repository, testes automatizados (Vitest)
 - [x] **v1.2.0** — Configuração por arquivo (`config.json`): categorias, prefixos, horários, escalação
 - [x] **v1.3.0** — Gestão de dados: `/uso`, `/exportar` (JSON por DM), `/limpar` (com confirmação por botão)
+- [x] **v1.4.0** — Segurança e site: intent `MessageContent` removido, validação de prefixos, deploy endurecido, termos de serviço, política de privacidade e site em cutucao.assertlab.com
 - [ ] Comandos `/config` para configuração em tempo real (sem reiniciar o bot)
 - [ ] Dashboard web para visualização de status
 - [ ] Integração com Google Calendar

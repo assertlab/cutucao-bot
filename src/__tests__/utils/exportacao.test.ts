@@ -60,7 +60,7 @@ describe("montarExportacao", () => {
 
     expect(json.exportacao).toEqual({
       data: "2026-04-25T18:00:00.000Z",
-      versao: "1.3.0",
+      versao: "1.4.0",
       servidor: "ASSERT Lab (CIn-UFPE)",
       filtro: "tudo",
     });
