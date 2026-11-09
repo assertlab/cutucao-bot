@@ -175,11 +175,11 @@ O cutuCÃO lida com dados de alunos reais e foi projetado com segurança como pr
 
 - **Menor privilégio** — O bot solicita apenas 4 permissões no Discord. Nunca Administrator.
 - **Guild único** — O bot recusa operar em qualquer servidor que não seja o configurado.
-- **Dados mínimos** — O banco armazena apenas IDs de canais, nomes de canais e flags de check-in. Nunca armazena conteúdo de mensagens nem IDs de usuários. Atenção: nomes de canal como `phd-nome-sobrenome` identificam pessoas e são dado pessoal (LGPD); veja a [política de retenção](docs/guia-operacional.md#retenção-e-dados-pessoais-lgpd).
+- **Sem dados pessoais** — O banco armazena apenas IDs de canais, nomes de canais e flags de check-in. Nunca armazena conteúdo de mensagens.
 - **Sanitização** — Toda entrada de usuário é validada e sanitizada antes do uso.
 - **Rate limiting** — Limites internos evitam que bugs causem spam de mensagens.
 - **Circuit breaker** — Jobs que falham repetidamente são desabilitados temporariamente.
-- **Retenção manual** — Histórico mantido até o orientador removê-lo com `/limpar`; sem deleção automática.
+- **Retenção total** — Histórico mantido indefinidamente; sem deleção automática.
 - **Prepared statements** — Todas as queries SQL usam prepared statements.
 - **Gestão de dados protegida** — `/limpar` exige confirmação obrigatória por botão antes de deletar (com opção de exportar antes); `/exportar` entrega o JSON apenas por DM ao orientador. Dados nunca são expostos em canais públicos.
 
