@@ -12,7 +12,7 @@ O código é aberto (licença MIT). Grupos que instalam a própria cópia do bot
 
 ## 2. Controlador e contato
 
-- **Controlador:** ASSERT Lab, Centro de Informática da Universidade Federal de Pernambuco (CIn-UFPE)
+- **Controlador:** Universidade Federal de Pernambuco (UFPE), por meio do ASSERT Lab, Centro de Informática (CIn-UFPE)
 - **Responsável:** Prof. Vinicius Garcia
 - **Contato para privacidade:** vcg@cin.ufpe.br
 
