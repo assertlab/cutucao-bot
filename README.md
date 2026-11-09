@@ -193,6 +193,8 @@ Outras opções de hospedagem: Fly.io ou qualquer VPS com Node.js. Em qualquer p
 
 ## Documentação
 
+A documentação também está publicada em **[cutucao.assertlab.com](https://cutucao.assertlab.com)**, com a [política de privacidade](https://cutucao.assertlab.com/politica-de-privacidade) e os [termos de serviço](https://cutucao.assertlab.com/termos-de-servico).
+
 Além deste README e da [SPEC.md](SPEC.md) (especificação técnica completa), a pasta `docs/` reúne:
 
 - [docs/guia-operacional.md](docs/guia-operacional.md): premissas do servidor, convenções de nomenclatura, configuração via `config.json`, variáveis de ambiente, comandos de gestão de dados e troubleshooting.
