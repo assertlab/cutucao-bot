@@ -254,6 +254,7 @@ ProtectControlGroups=true
 LockPersonality=true
 RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
 CapabilityBoundingSet=
+UMask=0077
 
 [Install]
 WantedBy=multi-user.target

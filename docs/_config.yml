@@ -1,0 +1,33 @@
+title: cutuCÃO
+description: O vira-lata caramelo que não te deixa esquecer o check-in. Bot Discord do ASSERT Lab (CIn-UFPE) para acompanhamento de orientações.
+lang: pt-BR
+url: "https://assertlab.github.io"
+baseurl: "/cutucao-bot"
+repo_url: "https://github.com/assertlab/cutucao-bot"
+
+# Plugins liberados no GitHub Pages
+plugins:
+  - jekyll-relative-links
+  - jekyll-optional-front-matter
+  - jekyll-titles-from-headings
+
+# Faz os links entre os .md (ex.: guia-operacional.md) virarem links do site
+relative_links:
+  enabled: true
+  collections: false
+
+titles_from_headings:
+  enabled: true
+  strip_title: false
+  collections: false
+
+# Todas as páginas em Markdown usam o layout de documentação
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: doc
+
+# melhorias-es.md é um registro interno e contém {{placeholders}}, que o Liquid interpretaria
+exclude:
+  - melhorias-es.md

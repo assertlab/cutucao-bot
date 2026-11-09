@@ -12,7 +12,7 @@ A instância operada pelo ASSERT Lab funciona apenas no servidor Discord do labo
 
 ## 2. Código aberto
 
-O código-fonte é distribuído sob a [licença MIT](../LICENSE). Quem instala e opera a própria cópia do bot é o único responsável por essa instância, por sua configuração e pelos dados que ela trata, e não está coberto por estes termos.
+O código-fonte é distribuído sob a [licença MIT](https://github.com/assertlab/cutucao-bot/blob/main/LICENSE). Quem instala e opera a própria cópia do bot é o único responsável por essa instância, por sua configuração e pelos dados que ela trata, e não está coberto por estes termos.
 
 ## 3. Uso aceitável
 
@@ -21,9 +21,9 @@ Ao usar o cutuCÃO, você concorda em:
 - cumprir os [Termos de Serviço](https://discord.com/terms) e as [Diretrizes da Comunidade](https://discord.com/guidelines) do Discord;
 - não tentar burlar as restrições de acesso dos comandos exclusivos do orientador;
 - não usar o bot para enviar spam, assediar outras pessoas ou sobrecarregar o serviço de propósito;
-- não explorar falhas de segurança. Se encontrar uma, reporte-a de forma privada como descrito no [guia de contribuição](../CONTRIBUTING.md#questões-de-segurança).
+- não explorar falhas de segurança. Se encontrar uma, reporte-a de forma privada como descrito no [guia de contribuição](https://github.com/assertlab/cutucao-bot/blob/main/CONTRIBUTING.md#questões-de-segurança).
 
-Interações nos espaços do projeto seguem o [Código de Conduta](../CODE_OF_CONDUCT.md).
+Interações nos espaços do projeto seguem o [Código de Conduta](https://github.com/assertlab/cutucao-bot/blob/main/CODE_OF_CONDUCT.md).
 
 ## 4. Dados
 

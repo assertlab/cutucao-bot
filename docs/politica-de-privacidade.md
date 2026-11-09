@@ -73,7 +73,7 @@ Para exercer qualquer desses direitos, escreva para **vcg@cin.ufpe.br**. Respond
 
 ## 8. Segurança
 
-Entre as medidas adotadas estão: menor privilégio de permissões no Discord, operação em um único servidor, consultas ao banco feitas só com *prepared statements*, arquivos de dados com acesso restrito, logs sem conteúdo de mensagens nem tokens, e confirmação obrigatória antes de qualquer exclusão. Os detalhes técnicos estão na [seção 9 da especificação](../SPEC.md).
+Entre as medidas adotadas estão: menor privilégio de permissões no Discord, operação em um único servidor, consultas ao banco feitas só com *prepared statements*, arquivos de dados com acesso restrito, logs sem conteúdo de mensagens nem tokens, e confirmação obrigatória antes de qualquer exclusão. Os detalhes técnicos estão na [seção 9 da especificação](https://github.com/assertlab/cutucao-bot/blob/main/SPEC.md).
 
 Em caso de incidente que possa afetar seus dados, os membros do servidor serão avisados.
 
