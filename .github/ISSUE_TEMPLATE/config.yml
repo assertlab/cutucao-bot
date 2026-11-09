@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 📖 Guia Operacional
+    url: https://github.com/assertlab/cutucao-bot/blob/main/docs/guia-operacional.md
+    about: Dúvidas de configuração, nomenclatura de canais e troubleshooting.
+  - name: 🔒 Reportar vulnerabilidade de segurança
+    url: https://github.com/assertlab/cutucao-bot/security/advisories/new
+    about: Não abra issue pública para vulnerabilidades. Use o reporte privado.

@@ -1,0 +1,56 @@
+name: ✨ Sugerir funcionalidade
+description: Proponha uma ideia ou melhoria para o cutuCÃO
+title: "[Feature]: "
+labels: ["enhancement", "triagem"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado pela ideia! Dê uma olhada no [Roadmap do README](https://github.com/assertlab/cutucao-bot/blob/main/README.md#roadmap) para ver se ela já está planejada.
+
+  - type: textarea
+    id: problema
+    attributes:
+      label: Qual problema esta funcionalidade resolve?
+      description: Conte a situação do dia a dia de orientador ou orientando que motivou a ideia.
+      placeholder: "Ex.: como orientador, não consigo ver a taxa de adesão ao check-in ao longo do semestre."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solucao
+    attributes:
+      label: Solução proposta
+      description: Como você imagina que deveria funcionar? Comandos, mensagens, horários etc.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternativas
+    attributes:
+      label: Alternativas consideradas
+      description: Outras soluções ou contornos que você já pensou ou usa hoje.
+
+  - type: dropdown
+    id: publico
+    attributes:
+      label: Quem se beneficia?
+      multiple: true
+      options:
+        - Orientador(a)
+        - Orientandos
+        - Quem faz o deploy / mantém o bot
+        - Outros grupos de pesquisa que adaptam o bot
+
+  - type: textarea
+    id: privacidade
+    attributes:
+      label: Impacto em privacidade e segurança
+      description: A ideia exige guardar novos dados, novas permissões do Discord ou expor informações dos alunos? Se não, pode deixar em branco.
+
+  - type: checkboxes
+    id: contribuir
+    attributes:
+      label: Contribuição
+      options:
+        - label: Tenho interesse em implementar esta funcionalidade.
