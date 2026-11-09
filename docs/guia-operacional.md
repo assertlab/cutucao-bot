@@ -293,9 +293,21 @@ O bot usa SQLite com WAL mode. O banco é criado automaticamente na primeira exe
 
 **Índices:** `(semana, canalId)` para consultas rápidas por semana.
 
-**Retenção:** O histórico é mantido indefinidamente. Use o campo `visualizacao.meses_resumo_padrao` em `config.json` para controle de visualização no dashboard futuro.
+**Retenção:** O histórico é mantido até ser removido manualmente. O campo `visualizacao.meses_resumo_padrao` em `config.json` só controla a visualização, não apaga dados. Veja [Retenção e dados pessoais (LGPD)](#retenção-e-dados-pessoais-lgpd).
 
-**O que NÃO é armazenado:** conteúdo de mensagens, IDs de usuários dos alunos, e-mails, ou qualquer dado pessoal além do nome do canal (que é público no servidor).
+**O que NÃO é armazenado:** conteúdo de mensagens, IDs de usuários dos alunos, e-mails ou qualquer outro dado além do nome do canal.
+
+### Retenção e dados pessoais (LGPD)
+
+O nome do canal (por exemplo `phd-nome-sobrenome`) identifica o aluno e, junto com as datas de check-in, é **dado pessoal**. Recomendações para o grupo:
+
+- **Finalidade:** acompanhar a regularidade das orientações. Não use o banco ou as exportações para outro fim.
+- **Acesso:** só o orientador acessa os dados (`/status`, `/resumo`, `/exportar`, `/limpar`). O arquivo do banco deve ter permissão `600` e a pasta `data/` `700`, e os backups merecem o mesmo cuidado.
+- **Retenção:** defina um prazo (sugestão: manter só o período letivo/da orientação em curso) e apague o que passar dele com `/limpar`.
+- **Desligamento do aluno:** ao fim da orientação, exporte o que for necessário e remova os registros do canal com `/limpar escopo:canal`.
+- **Solicitação do titular:** a remoção de dados de uma pessoa a pedido dela também se faz com `/limpar escopo:canal` (ou `escopo:canais`). Lembre de apagar backups e exportações antigas (`cutucao-*.json`, cópias de `cutucao.db`).
+
+Não há exclusão automática por prazo; a retenção depende desta rotina manual.
 
 ---
 
