@@ -6,7 +6,7 @@ import {
 } from "../repositories";
 import { currentIsoWeek } from "./semana";
 
-const VERSAO_EXPORTACAO = "1.3.0";
+const VERSAO_EXPORTACAO = "1.4.0";
 const SERVIDOR_EXPORTACAO = "ASSERT Lab (CIn-UFPE)";
 
 export interface RegistroExportado {
