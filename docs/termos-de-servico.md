@@ -35,7 +35,7 @@ O cutuCÃO só registra se houve atividade no canal durante a semana. Os relató
 
 ## 6. Disponibilidade e garantias
 
-O serviço é oferecido "no estado em que se encontra", sem garantia de disponibilidade contínua. Lembretes podem atrasar ou deixar de ser enviados por manutenção, falhas do Discord ou da hospedagem. O ASSERT Lab não se responsabiliza por prazos acadêmicos perdidos em razão de falhas do bot; o acompanhamento da orientação continua sendo responsabilidade do orientador e do orientando.
+O serviço é oferecido "no estado em que se encontra", sem garantia de disponibilidade contínua. Lembretes podem atrasar ou deixar de ser enviados por manutenção, falhas do Discord ou da hospedagem. Os mantenedores do projeto não se responsabilizam por prazos acadêmicos perdidos em razão de falhas do bot; o acompanhamento da orientação continua sendo responsabilidade do orientador e do orientando.
 
 ## 7. Suspensão e encerramento
 
