@@ -72,7 +72,7 @@ O Oracle Cloud tem um firewall na camada de rede (Security Lists) que bloqueia t
 1. Vá em **Networking** → **Virtual Cloud Networks** → selecione sua VCN
 2. Clique na **subnet** → clique na **Security List**
 3. Verifique que existe uma regra de **Egress** permitindo **All Protocols** para **0.0.0.0/0** (saída irrestrita)
-4. Para SSH, verifique que existe uma regra de **Ingress** para porta **22** TCP de **0.0.0.0/0** (ou do seu IP específico, para mais segurança)
+4. Para SSH, verifique que existe uma regra de **Ingress** para porta **22** TCP. Prefira restringir a origem ao **seu IP** (`SEU_IP/32`) em vez de `0.0.0.0/0`, e mantenha o login por senha desativado (só chave SSH, que é o padrão das instâncias Oracle)
 
 ---
 
@@ -174,6 +174,12 @@ DATABASE_PATH=./data/cutucao.db
 TZ=America/Recife
 ```
 
+Restrinja o acesso ao arquivo: ele contém o token do bot e não deve ser legível por outros usuários da máquina.
+
+```bash
+chmod 600 .env
+```
+
 Salve com Ctrl+O, Enter, Ctrl+X.
 
 ### 5.4. Configurar o config.json
@@ -195,6 +201,7 @@ npm run build
 
 ```bash
 mkdir -p data
+chmod 700 data
 ```
 
 ### 5.7. Testar manualmente
@@ -241,6 +248,12 @@ NoNewPrivileges=true
 ProtectSystem=strict
 ProtectHome=read-only
 ReadWritePaths=/home/ubuntu/cutucao-bot/data
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+LockPersonality=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
 
 [Install]
 WantedBy=multi-user.target

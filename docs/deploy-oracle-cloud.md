@@ -152,6 +152,12 @@ DATABASE_PATH=./data/cutucao.db
 TZ=America/Recife
 ```
 
+Restrinja o acesso ao arquivo: ele contém o token do bot e não deve ser legível por outros usuários da máquina.
+
+```bash
+chmod 600 .env
+```
+
 Salve com `Ctrl+O`, Enter, `Ctrl+X`.
 
 ### 5.4. Configurar o bot
@@ -167,6 +173,7 @@ Ajuste categorias, prefixos e horários conforme seu servidor. Consulte o [Guia 
 
 ```bash
 mkdir -p data
+chmod 700 data
 npm run build
 npm start
 ```
@@ -206,6 +213,12 @@ NoNewPrivileges=true
 ProtectSystem=strict
 ProtectHome=read-only
 ReadWritePaths=/home/ubuntu/cutucao-bot/data
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+LockPersonality=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
 
 [Install]
 WantedBy=multi-user.target
@@ -213,7 +226,9 @@ WantedBy=multi-user.target
 
 Salve com `Ctrl+O`, Enter, `Ctrl+X`.
 
-As diretivas de segurança no serviço (`NoNewPrivileges`, `ProtectSystem`, `ReadWritePaths`) garantem que o bot não consiga escrever fora da pasta `data/`.
+As diretivas de segurança no serviço garantem que o bot não consiga escrever fora da pasta `data/` (`ProtectSystem`, `ReadWritePaths`), não ganhe privilégios (`NoNewPrivileges`, `CapabilityBoundingSet=`), use `/tmp` próprio (`PrivateTmp`) e abra apenas sockets IP e locais (`RestrictAddressFamilies`).
+
+Depois de iniciar o serviço, confira a pontuação de exposição com `systemd-analyze security cutucao`. Se o bot não conseguir conectar após adicionar essas diretivas, remova `RestrictAddressFamilies` primeiro e veja `journalctl -u cutucao -n 50`.
 
 ### 6.2. Habilitar e iniciar
 
