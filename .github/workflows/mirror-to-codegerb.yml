@@ -5,6 +5,10 @@ on:
     branches: [ main ]
     tags: [ 'v*' ]
 
+# O job só precisa ler o repositório; o acesso ao Codeberg usa o secret abaixo
+permissions:
+  contents: read
+
 # Força o uso do Node.js 24 para silenciar o warning de depreciação
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -14,9 +18,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout do código
-        uses: actions/checkout@v7
+        # Fixado por SHA (v7) para evitar que uma tag movida execute código não revisado
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0 # Puxa todo o histórico, branches e tags
+          persist-credentials: false # O token do GitHub não precisa ficar no .git/config
 
       - name: 🚀 Sincronizando com o Codeberg
         env:
@@ -24,14 +30,20 @@ jobs:
           AUTH_USER: "vinicius3w"       # Seu usuário (quem faz o login)
           TARGET_OWNER: "ASSERT_Lab"    # A organização (onde o repo mora)
           REPO_NAME: "cutucao-bot"
+          REF_NAME: ${{ github.ref_name }}
+          REF_TYPE: ${{ github.ref_type }}
         run: |
-          # Configura o git local para não reclamar de credenciais
-          git config --global user.name "GitHub Action Mirror"
-          git config --global user.email "action@github.com"
-          
-          # Adiciona o Codeberg como um remote (Note a separação de AUTH_USER e TARGET_OWNER)
-          git remote add codeberg https://$AUTH_USER:$CODEBERG_TOKEN@codeberg.org/$TARGET_OWNER/$REPO_NAME.git
-          
-          # Empurra todo o histórico e tags forçando a sincronia
-          git push codeberg --all --force
-          git push codeberg --tags --force
+          # O token vai num header HTTP efêmero (não na URL do remote), então
+          # não fica gravado em .git/config nem aparece em mensagens de erro do git
+          AUTH_HEADER="Authorization: Basic $(printf '%s:%s' "$AUTH_USER" "$CODEBERG_TOKEN" | base64 -w0)"
+          echo "::add-mask::${AUTH_HEADER#Authorization: Basic }"
+
+          URL="https://codeberg.org/$TARGET_OWNER/$REPO_NAME.git"
+
+          # Envia só a ref que disparou o workflow, sem --force: se o Codeberg
+          # divergir, o push falha e alguém precisa olhar, em vez de sobrescrever
+          if [ "$REF_TYPE" = "tag" ]; then
+            git -c "http.extraHeader=$AUTH_HEADER" push "$URL" "refs/tags/$REF_NAME:refs/tags/$REF_NAME"
+          else
+            git -c "http.extraHeader=$AUTH_HEADER" push "$URL" "refs/heads/$REF_NAME:refs/heads/$REF_NAME"
+          fi
