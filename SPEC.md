@@ -271,9 +271,10 @@ cutucao-bot/
 ### Intents necessários (Discord Developer Portal)
 
 - `Guilds` — acesso a canais e categorias
-- `GuildMessages` — ler mensagens nos canais monitorados
+- `GuildMessages` — detectar mensagens nos canais monitorados (o check-in conta pela presença da mensagem, sem ler o texto)
 - `GuildMembers` — detectar novos membros (boas-vindas)
-- `MessageContent` — ler conteúdo das mensagens (para detectar check-ins)
+
+`MessageContent` (privilegiado) **não** é necessário e deve permanecer desativado.
 
 ---
 

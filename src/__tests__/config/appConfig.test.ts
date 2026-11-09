@@ -85,6 +85,16 @@ describe("loadAppConfig — validação", () => {
     expect(() => loadAppConfig(tmpPath)).toThrow(/categorias/);
   });
 
+  it("lança erro quando um prefixo contém metacaracteres de regex", () => {
+    writeFileSync(tmpPath, JSON.stringify({ prefixos: { "a.*": "Qualquer" } }));
+    expect(() => loadAppConfig(tmpPath)).toThrow(/prefixo "a\.\*"/);
+  });
+
+  it("lança erro quando o rótulo de um prefixo não é texto", () => {
+    writeFileSync(tmpPath, JSON.stringify({ prefixos: { phd: 42 } }));
+    expect(() => loadAppConfig(tmpPath)).toThrow(/rótulo/);
+  });
+
   it("lança erro quando prefixos é vazio", () => {
     writeFileSync(tmpPath, JSON.stringify({ prefixos: {} }));
     expect(() => loadAppConfig(tmpPath)).toThrow(/prefixos/);

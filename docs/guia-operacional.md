@@ -307,7 +307,7 @@ Checklist completa para colocar o cutuCÃO no ar em um novo servidor:
 
 - [ ] Criar uma nova aplicação em https://discord.com/developers/applications
 - [ ] Ir em Bot → Reset Token → copiar e guardar o token
-- [ ] Ativar Server Members Intent e Message Content Intent
+- [ ] Ativar Server Members Intent (Message Content Intent deve ficar **desativado**)
 - [ ] Em OAuth2 → URL Generator: marcar `bot` + `applications.commands`
 - [ ] Permissões: apenas Send Messages, Read Message History, View Channels, Use Slash Commands
 - [ ] Copiar a URL e adicionar o bot ao servidor

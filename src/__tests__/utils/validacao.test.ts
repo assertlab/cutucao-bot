@@ -4,6 +4,7 @@ import {
   isOrientacaoChannelName,
   isValidCron,
   isValidDiscordId,
+  isValidPrefixo,
   nivelFromChannelName,
   parseListaNomesCanais,
   sanitizeDisplayName,
@@ -187,5 +188,25 @@ describe("parseListaNomesCanais", () => {
       "phd-jack",
       "msc-x",
     ]);
+  });
+});
+
+describe("isValidPrefixo", () => {
+  it("aceita letras minúsculas e dígitos", () => {
+    expect(isValidPrefixo("phd")).toBe(true);
+    expect(isValidPrefixo("pos2")).toBe(true);
+  });
+  it("rejeita metacaracteres, maiúsculas e vazio", () => {
+    expect(isValidPrefixo("a.*")).toBe(false);
+    expect(isValidPrefixo("(")).toBe(false);
+    expect(isValidPrefixo("PhD")).toBe(false);
+    expect(isValidPrefixo("")).toBe(false);
+  });
+});
+
+describe("isOrientacaoChannelName com prefixos especiais", () => {
+  it("trata o prefixo literalmente (sem interpretar regex)", () => {
+    expect(isOrientacaoChannelName("x.z-aluno", ["x.z"])).toBe(true);
+    expect(isOrientacaoChannelName("x.z-aluno", ["x.z"])).toBe(true);
   });
 });

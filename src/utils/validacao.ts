@@ -8,12 +8,20 @@ export function isValidCron(expr: string): boolean {
   return safePattern.test(trimmed);
 }
 
+export function isValidPrefixo(prefixo: string): boolean {
+  return /^[a-z0-9]{1,20}$/.test(prefixo);
+}
+
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 export function isOrientacaoChannelName(
   name: string,
   prefixes: string[] = ["phd", "msc", "bsc"],
 ): boolean {
   if (prefixes.length === 0) return false;
-  const pattern = new RegExp(`^(${prefixes.join("|")})-[a-z0-9-]+$`);
+  const pattern = new RegExp(`^(${prefixes.map(escapeRegex).join("|")})-[a-z0-9-]+$`);
   return pattern.test(name);
 }
 
@@ -43,7 +51,6 @@ export function displayNameFromChannel(
   channelName: string,
   prefixes: string[] = ["phd", "msc", "bsc"],
 ): string {
-  const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const prefixPattern = prefixes.length > 0
     ? new RegExp(`^(${prefixes.map(escapeRegex).join("|")})-`)
     : /^[a-z]+-/;
