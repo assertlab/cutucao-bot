@@ -126,6 +126,11 @@ describe("sanitizeDisplayName", () => {
     const long = "a".repeat(100);
     expect(sanitizeDisplayName(long)).toHaveLength(80);
   });
+  it("neutralizes links, angle-bracket mentions and line breaks", () => {
+    expect(sanitizeDisplayName("[clique](http://x.io)")).toBe("clique(http://x.io)");
+    expect(sanitizeDisplayName("<@123456789012345678>")).toBe("123456789012345678");
+    expect(sanitizeDisplayName("linha1\r\nlinha2")).toBe("linha1linha2");
+  });
   it("passes through clean names unchanged", () => {
     expect(sanitizeDisplayName("Alana Fernandes")).toBe("Alana Fernandes");
   });

@@ -83,8 +83,11 @@ process.on("SIGTERM", () => void shutdown("SIGTERM"));
 process.on("unhandledRejection", (err) => {
   log.error("Unhandled rejection.", err);
 });
+// Após uma exceção não tratada o estado do processo é indefinido: encerra e deixa
+// o supervisor (systemd, Restart=always) subir uma instância limpa.
 process.on("uncaughtException", (err) => {
-  log.error("Uncaught exception.", err);
+  log.error("Uncaught exception. Encerrando.", err);
+  process.exit(1);
 });
 
 client.login(config.discordToken).catch((err) => {

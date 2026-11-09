@@ -8,7 +8,7 @@ import {
   type Mock,
   vi,
 } from "vitest";
-import { onLimparButton } from "../../commands/limpar";
+import { onLimparButton, resolverFiltroLimpar } from "../../commands/limpar";
 import {
   limparTodosPendentes,
   salvarPendente,
@@ -190,5 +190,25 @@ describe("/limpar — confirmação obrigatória", () => {
     expect(checkinRepo.contarRegistros()).toBe(1);
     const restantes = checkinRepo.exportarRegistros({ tipo: "tudo" });
     expect(restantes[0]?.nivel).toBe("phd");
+  });
+});
+
+describe("/limpar — escopo=canais", () => {
+  function interacaoComLista(lista: string) {
+    const opcoes: Record<string, string> = { escopo: "canais", lista };
+    return {
+      options: { getString: (nome: string) => opcoes[nome] ?? null },
+    } as never;
+  }
+
+  it("aceita lista dentro do limite", () => {
+    const r = resolverFiltroLimpar(interacaoComLista("phd-a, msc-b"));
+    expect(r.ok).toBe(true);
+  });
+
+  it("rejeita lista com mais de 50 canais", () => {
+    const lista = Array.from({ length: 51 }, (_, i) => `phd-aluno${i}`).join(",");
+    const r = resolverFiltroLimpar(interacaoComLista(lista));
+    expect(r.ok).toBe(false);
   });
 });

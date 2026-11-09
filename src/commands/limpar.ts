@@ -24,7 +24,11 @@ import {
   salvarPendente,
 } from "./limparState";
 import { log, maskId } from "../utils/log";
-import { displayNameFromChannel, parseListaNomesCanais } from "../utils/validacao";
+import {
+  displayNameFromChannel,
+  MAX_CANAIS_LISTA,
+  parseListaNomesCanais,
+} from "../utils/validacao";
 import { SlashCommand } from "./types";
 
 export interface ResolucaoLimpar {
@@ -76,7 +80,7 @@ export function resolverFiltroLimpar(
       };
     }
     const nomes = parseListaNomesCanais(lista);
-    if (nomes.length === 0) {
+    if (nomes.length === 0 || nomes.length > MAX_CANAIS_LISTA) {
       return {
         ok: false,
         mensagemErro: mensagens.get("cmd_limpar_filtro_invalido", { escopo: "canais" }),
