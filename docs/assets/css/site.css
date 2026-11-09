@@ -93,6 +93,13 @@ code {
   font-size: 0.85rem; letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--caramel-light); border: 1px solid rgba(232, 184, 109, 0.35); border-radius: 999px;
 }
+.hero-tags { display: flex; align-items: center; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1rem; }
+.hero-tags .eyebrow { margin: 0; }
+.version-badge {
+  padding: 0.3rem 0.75rem; border-radius: 999px; font: 600 0.85rem var(--mono);
+  color: var(--navy-800); background: var(--caramel); text-decoration: none;
+}
+.version-badge:hover { background: var(--caramel-light); }
 .hero h1 {
   margin: 0 0 1.25rem; font-size: clamp(2.2rem, 5vw, 3.6rem);
   line-height: 1.08; letter-spacing: -0.025em; font-weight: 700;

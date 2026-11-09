@@ -6,6 +6,9 @@
         <span>cutu<b>CÃO</b></span>
       </a>
       <p class="footer-note">Ferramenta interna do <a href="https://assertlab.github.io/">ASSERT Lab</a>, Centro de Informática da UFPE. Código aberto sob licença MIT.</p>
+      {%- if site.github.latest_release.tag_name %}
+      <p class="footer-note">Versão <a href="{{ site.github.latest_release.html_url }}">{{ site.github.latest_release.tag_name }}</a> · <a href="{{ site.repo_url }}/releases">todas as versões</a></p>
+      {%- endif %}
     </div>
     <nav aria-label="Rodapé">
       <ul>

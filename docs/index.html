@@ -19,7 +19,12 @@ title: cutuCÃO
 
     <div class="hero-grid" id="conteudo">
       <div class="hero-copy">
-        <p class="eyebrow">Bot Discord do ASSERT Lab · CIn-UFPE</p>
+        <div class="hero-tags">
+          <p class="eyebrow">Bot Discord do ASSERT Lab · CIn-UFPE</p>
+          {%- if site.github.latest_release.tag_name %}
+          <a class="version-badge" href="{{ site.github.latest_release.html_url }}" title="Notas da versão">{{ site.github.latest_release.tag_name }}</a>
+          {%- endif %}
+        </div>
         <h1>O vira-lata caramelo que <span>não te deixa esquecer</span> o check-in.</h1>
         <p class="lead">Lembretes semanais, cobrança com carinho e um relatório silencioso para o orientador. Tudo assíncrono, sem microgerenciamento e sem ler uma única mensagem sua.</p>
         <div class="cta">
